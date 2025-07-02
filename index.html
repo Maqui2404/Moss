@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Clima Familiar - MOSS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .personal-info {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .personal-info h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .instructions {
+            padding: 30px;
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            margin: 0;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .instructions p {
+            color: #856404;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .questionnaire {
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .question {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #3498db;
+            margin-right: 15px;
+            min-width: 30px;
+            font-size: 1.1em;
+        }
+
+        .question-text {
+            flex: 1;
+            font-size: 1.05em;
+            color: #2c3e50;
+            line-height: 1.5;
+            margin-right: 20px;
+        }
+
+        .question-options {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-group label {
+            font-weight: 600;
+            cursor: pointer;
+            color: #495057;
+        }
+
+        .progress-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
+            z-index: 100;
+        }
+
+        .progress-container {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .button-container {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .results {
+            display: none;
+            padding: 30px;
+        }
+
+        .results h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dimension-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .dimension-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .dimension-score {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .dimension-category {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .category-excelente {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .category-buena {
+            background: #cce7ff;
+            color: #004085;
+        }
+
+        .category-promedio {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .category-mala {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .category-deficitaria {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .interpretation {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .interpretation h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        .interpretation p {
+            line-height: 1.6;
+            color: #424242;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .question {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .question-options {
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Escala de Clima Familiar - MOSS</h1>
+            <p>Evaluación del Ambiente Familiar</p>
+        </div>
+
+        <div id="personalInfo" class="personal-info">
+            <h2>Información Personal</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="codigo">Número de Celular:</label>
+                    <input type="text" id="codigo" name="codigo">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Apellidos y Nombres:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" id="edad" name="edad" min="10" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="genero">Género:</label>
+                    <select name="genero" id="genero">
+                        <option value="">Seleccione</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="rolfamilia">Rol en la Familia:</label>
+                    <select name="rolfamilia" id="rolfamilia">
+                        <option value="">Seleccione</option>
+                        <option value="Padre">Padre</option>
+                        <option value="Madre">Madre</option>
+                        <option value="Hijo">Hij@</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="estadocivil">Estado Civil:</label>
+                    <select id="estadocivil" name="estadocivil">
+                        <option value="">Seleccione</option>
+                        <option value="Soltero">Soltero</option>
+                        <option value="Conviviente">Conviviente</option>
+                        <option value="Casado">Casado</option>
+                        <option value="Viudo">Viudo</option>
+                        <option value="Otro">Otro</option>
+                        <option value="Prefieronoresponder">Prefiero no responder</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ocupacion">Ocupación:</label>
+                    <input type="text" id="ocupacion" name="ocupacion" required>
+                </div>
+                <div class="form-group">
+                    <label for="nivelestudio">Nivel de Estudio:</label>
+                    <select id="nivelestudio" name="nivelestudio">
+                        <option value="">Seleccione</option>
+                        <option value="Sin estudios">Sin estudios</option>
+                        <option value="Educación Primaria Incompleta">Educación Primaria Incompleta</option>
+                        <option value="Educación Primaria Completa">Educación Primaria Completa</option>
+                        <option value="Educación Secundaria Incompleta">Educación Secundaria Incompleta</option>
+                        <option value="Educación Secundaria Completa">Educación Secundaria Completa</option>
+                        <option value="Técnico Incompleto">Técnico Incompleto</option>
+                        <option value="Técnico Completo">Técnico Completo</option>
+                        <option value="Universitario Incompleto">Universitario Incompleto</option>
+                        <option value="Universidad Completa">Universidad Completa</option>
+                        <option value="Postgrado (Maestría o Doctorado)">Postgrado (Maestría o Doctorado)</option>
+                        <option value="Prefiero no Responder">Prefiero no Responder</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="niveleconomico">Nivel Económico:</label>
+                    <select id="niveleconomico" name="niveleconomico">
+                        <option value="">Seleccione</option>
+                        <option value="Alto">Alto</option>
+                        <option value="Medio">Medio</option>
+                        <option value="Bajo">Bajo</option>
+                        <option value="Vulnerable">Vulnerable</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="creencia">Creencia:</label>
+                    <input type="text" id="creencia" name="creencia">
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>INSTRUCCIONES</h3>
+            <p>Coloque 1, bajo la Columna V ó F si su respuesta coincide o discrepa de la opción del Cuestionario.</p>
+            <p><strong>Recuerde que NO HAY respuestas buenas ni malas.</strong> No emplee demasiado tiempo en cada frase
+                y conteste señalando la respuesta que mejor describa su situación presente.</p>
+        </div>
+
+        <div id="questionnaireSection">
+            <div class="progress-bar">
+                <div class="progress-container">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0 de 90 preguntas completadas (0%)</div>
+            </div>
+
+            <div class="questionnaire" id="questionnaire">
+                <!-- Las preguntas se generarán dinámicamente con JavaScript -->
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="clearAnswers()">Limpiar Respuestas</button>
+                <!-- <button onclick="enviarDatosAGoogleSheets()">Guardar en Google Sheets</button> -->
+                <button class="btn btn-primary" onclick="calculateResults()">Calcular Resultados</button>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <h2>Resultados del Perfil de Clima Familiar</h2>
+
+            <div id="personalData"></div>
+
+            <div class="results-grid" id="resultsGrid">
+                <!-- Los resultados se generarán dinámicamente -->
+            </div>
+
+            <div class="chart-container">
+                <canvas id="profileChart" width="800" height="400"></canvas>
+            </div>
+
+            <div class="interpretation" id="interpretation">
+                <!-- La interpretación se generará dinámicamente -->
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="resetQuestionnaire()">Nueva Evaluación</button>
+                <button class="btn btn-primary" onclick="printResults()">Imprimir Resultados</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preguntas del cuestionario FES
+        const questions = [
+            "En mi familia nos ayudamos y apoyamos realmente unos a otros",
+            "Los miembros de la familia guardan a menudo sus sentimientos para sí mismos",
+            "En nuestra familia peleamos mucho",
+            "En general ningún miembro de la familia decide por su cuenta",
+            "Creemos que es importante ser los mejores en cualquier cosa que hagamos",
+            "A menudo hablamos de temas políticos o sociales en familia",
+            "Pasamos en casa la mayor parte del tiempo libre",
+            "Los miembros de mi familia asistimos con bastante frecuencia a la iglesia",
+            "Las actividades de nuestra familia se planifican con cuidado",
+            "En mi familia tenemos reuniones obligatorias muy pocas veces",
+            "Muchas veces da la impresión de que en casa estamos \"pasando el rato\"",
+            "En casa hablamos abiertamente de lo que nos parece o queremos",
+            "En mi familia casi nunca mostramos abiertamente nuestros enojos",
+            "En mi familia nos esforzamos para mantener la independencia de cada uno",
+            "Para mi familia es muy importante triunfar en la vida",
+            "Casi nunca asistimos a reuniones culturales (exposiciones, conferencias, etc)",
+            "Frecuentemente vienen amistades a visitarnos a casa",
+            "En mi casa no rezamos en familia",
+            "En mi casa somos muy ordenados y limpios",
+            "En nuestra familia hay muy pocas normas que cumplir",
+            "Todos nos esforzamos mucho en lo que hacemos en casa",
+            "En mi familia es difícil \"desahogarse\" sin molestar a todos",
+            "En la casa a veces nos molestamos tanto que golpeamos o rompemos algo",
+            "En mi familia cada uno decide por sus propias cosas",
+            "Para nosotros es muy importante el dinero que gane cada uno",
+            "En mi familia es muy importante aprender algo nuevo o diferente",
+            "Alguno de mi familia practica habitualmente algún deporte",
+            "A menudo hablamos del sentido religioso de la Navidad, Semana Santa, etc",
+            "En mi casa muchas veces resulta difícil encontrar las cosas necesarias",
+            "En mi casa una sola persona toma la mayoría de las decisiones",
+            "En mi familia estamos fuertemente unidos",
+            "En mi casa comentamos nuestros problemas personales",
+            "Los miembros de mi familia, casi nunca expresamos nuestra cólera",
+            "Cada uno entra y sale de la casa cuando quiere",
+            "Nosotros aceptamos que haya competencia y \"que gane el mejor\"",
+            "Nos interesan poco las actividades culturales",
+            "Vamos con frecuencia al cine, excursiones, paseos",
+            "No creemos ni en el cielo ni en el infierno",
+            "En mi familia la puntualidad es muy importante",
+            "En la casa las cosas se hacen de una manera establecida",
+            "Cuando hay que hacer algo en la casa, es raro que alguien sea voluntario",
+            "En casa, si a alguno se le ocurre hacer algo, lo hace sin pensarlo más",
+            "Las personas de mi familia nos criticamos frecuentemente unas a otras",
+            "En mi familia, las personas tienen poca vida privada o independiente",
+            "Nos esforzamos en hacer las cosas cada vez un poco mejor",
+            "En mi casa casi nunca tenemos conversaciones intelectuales",
+            "En mi casa casi todos tenemos una o dos aficiones",
+            "Las personas de mi familia tenemos ideas muy precisas sobre lo que es bueno o malo",
+            "En mi familia cambiamos de opinión frecuentemente",
+            "En mi casa se da mucha importancia a cumplir las normas",
+            "Las personas de mi familia nos apoyamos unas a otras",
+            "En mi familia, cuando uno se queja, siempre hay otro que se siente afectado",
+            "En mi familia a veces nos peleamos y nos vamos de las manos",
+            "Generalmente en mi familia cada persona sólo confía en sí misma cuando surge un problema",
+            "En mi casa nos preocupamos poco por los ascensos en el trabajo o las notas en el colegio",
+            "Algunos de nosotros toca algún instrumento musical",
+            "Ninguno de la familia participa en actividades recreativas, fuera del trabajo o el colegio",
+            "Creemos que hay algunas cosas en las que hay que tener fe",
+            "En la casa nos aseguramos de que nuestros dormitorios queden limpios y ordenados",
+            "En las decisiones familiares todas las opiniones tienen el mismo valor",
+            "En mi familia hay poco espíritu de grupo",
+            "En mi familia los temas de pagos y dinero se tratan abiertamente",
+            "Si en mi familia hay desacuerdo, todos nos esforzamos en suavizar las cosas y lograr paz",
+            "Las personas de mi familia reaccionan firmemente al defender sus propios derechos",
+            "En nuestra familia apenas nos esforzamos para tener éxito",
+            "Las personas de mi familia vamos con frecuencia a la biblioteca o leemos obras literarias",
+            "Los miembros de mi familia asistimos a veces a cursillos y clases por afición o por interés",
+            "En mi familia cada persona tiene ideas distintas sobre lo que es bueno o malo",
+            "En mi familia están claramente definidas las tareas de cada persona",
+            "En mi familia cada uno tiene libertad para lo que quiera",
+            "Realmente nos llevamos bien unos con otros",
+            "Generalmente tenemos cuidado con lo que nos decimos",
+            "Los miembros de la familia estamos enfrentados unos con otros",
+            "En mi casa es difícil ser independiente sin herir los sentimientos de los demás",
+            "\"Primero es el trabajo, luego es la diversión\" es una norma en mi familia",
+            "En mi casa ver televisión es más importante que leer",
+            "Las personas de nuestra familia salimos mucho a divertirnos",
+            "En mi casa leer la Biblia es algo importante",
+            "En mi familia el dinero no se administra con mucho cuidado",
+            "En mi casa las normas son muy rígidas y \"tienen\" que cumplirse",
+            "En mi familia se concede mucha atención y tiempo a cada uno",
+            "En mi casa expresamos nuestras opiniones de modo frecuente y espontáneo",
+            "En mi familia creemos que no se consigue mucho elevando la voz",
+            "En mi casa no hay libertad para expresar claramente lo que se piensa",
+            "En mi casa hacemos comparaciones sobre nuestra eficacia en el trabajo o el estudio",
+            "A los miembros de mi familia nos gusta realmente el arte, la música o la literatura",
+            "Nuestra principal forma de diversión es ver la televisión o escuchar radio",
+            "En mi familia creemos que el que comete una falta, tendrá su castigo",
+            "En mi casa generalmente la mesa se recoge inmediatamente después de comer",
+            "En mi familia, uno no puede salirse con la suya"
+        ];
+
+        // Mapping de preguntas a dimensiones (índice de pregunta -> dimensión)
+        const questionToDimension = {
+            1: 'CO', 11: 'CO', 21: 'CO', 31: 'CO', 41: 'CO', 51: 'CO', 61: 'CO', 71: 'CO', 81: 'CO',
+            2: 'EX', 12: 'EX', 22: 'EX', 32: 'EX', 42: 'EX', 52: 'EX', 62: 'EX', 72: 'EX', 82: 'EX',
+            3: 'CT', 13: 'CT', 23: 'CT', 33: 'CT', 43: 'CT', 53: 'CT', 63: 'CT', 73: 'CT', 83: 'CT',
+            4: 'AU', 14: 'AU', 24: 'AU', 34: 'AU', 44: 'AU', 54: 'AU', 64: 'AU', 74: 'AU', 84: 'AU',
+            5: 'AC', 15: 'AC', 25: 'AC', 35: 'AC', 45: 'AC', 55: 'AC', 65: 'AC', 75: 'AC', 85: 'AC',
+            6: 'IC', 16: 'IC', 26: 'IC', 36: 'IC', 46: 'IC', 56: 'IC', 66: 'IC', 76: 'IC', 86: 'IC',
+            7: 'SR', 17: 'SR', 27: 'SR', 37: 'SR', 47: 'SR', 57: 'SR', 67: 'SR', 77: 'SR', 87: 'SR',
+            8: 'MR', 18: 'MR', 28: 'MR', 38: 'MR', 48: 'MR', 58: 'MR', 68: 'MR', 78: 'MR', 88: 'MR',
+            9: 'OR', 19: 'OR', 29: 'OR', 39: 'OR', 49: 'OR', 59: 'OR', 69: 'OR', 79: 'OR', 89: 'OR',
+            10: 'CN', 20: 'CN', 30: 'CN', 40: 'CN', 50: 'CN', 60: 'CN', 70: 'CN', 80: 'CN', 90: 'CN'
+        };
+
+        // Preguntas que se puntúan de forma inversa (F = 1, V = 0)
+        const inverseQuestions = [2, 3, 4, 10, 11, 16, 18, 20, 22, 23, 29, 30, 33, 36, 38, 41, 42, 43, 44, 46, 49, 52, 53, 54, 55, 57, 61, 65, 68, 70, 73, 74, 76, 79, 84, 87];
+
+        let answers = {};
+        let currentProgress = 0;
+
+        // Dimensiones y sus nombres completos
+        const dimensions = {
+            'CO': 'Cohesión',
+            'EX': 'Expresividad',
+            'CT': 'Conflicto',
+            'AU': 'Autonomía',
+            'AC': 'Actuación',
+            'IC': 'Intelectual-Cultural',
+            'SR': 'Social-Recreativo',
+            'MR': 'Moralidad-Religiosidad',
+            'OR': 'Organización',
+            'CN': 'Control'
+        };
+
+        // Baremos para interpretación (aproximados)
+        const baremos = {
+            'CO': { excelente: [8, 9], buena: [6, 7], promedio: [4, 5], mala: [2, 3], deficitaria: [0, 1] },
+            'EX': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'CT': { excelente: [0, 1], buena: [2], promedio: [3, 4], mala: [5, 6], deficitaria: [7, 8, 9] },
+            'AU': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'AC': { excelente: [8, 9], buena: [6, 7], promedio: [4, 5], mala: [2, 3], deficitaria: [0, 1] },
+            'IC': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'SR': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'MR': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'OR': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] },
+            'CN': { excelente: [7, 8, 9], buena: [5, 6], promedio: [3, 4], mala: [1, 2], deficitaria: [0] }
+        };
+
+        function initializeQuestionnaire() {
+            const questionnaireDiv = document.getElementById('questionnaire');
+            questionnaireDiv.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionNumber = index + 1;
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-number">${questionNumber}</div>
+                    <div class="question-text">${question}</div>
+                    <div class="question-options">
+                        <div class="radio-group">
+                            <input type="radio" id="q${questionNumber}_v" name="q${questionNumber}" value="V" onchange="updateAnswer(${questionNumber}, 'V')">
+                            <label for="q${questionNumber}_v">V</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" id="q${questionNumber}_f" name="q${questionNumber}" value="F" onchange="updateAnswer(${questionNumber}, 'F')">
+                            <label for="q${questionNumber}_f">F</label>
+                        </div>
+                    </div>
+                `;
+                questionnaireDiv.appendChild(questionDiv);
+            });
+        }
+
+        function updateAnswer(questionNumber, value) {
+            answers[questionNumber] = value;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answeredQuestions = Object.keys(answers).length;
+            const progress = (answeredQuestions / 90) * 100;
+            currentProgress = progress;
+
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent =
+                `${answeredQuestions} de 90 preguntas completadas (${Math.round(progress)}%)`;
+        }
+
+        function clearAnswers() {
+            answers = {};
+            currentProgress = 0;
+
+            // Limpiar todos los radio buttons
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => radio.checked = false);
+
+            updateProgress();
+        }
+
+        function calculateResults() {
+            
+            // Validar que todas las preguntas estén respondidas
+            if (Object.keys(answers).length < 90) {
+                alert('Por favor, responda todas las preguntas antes de calcular los resultados.');
+                return;
+            }
+
+            // Validar información personal
+            const codigo = document.getElementById('codigo').value;
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const genero = document.getElementById('genero').value;
+            const rolfamilia = document.getElementById('rolfamilia').value;
+            const estadocivil = document.getElementById('estadocivil').value;
+            const ocupacion = document.getElementById('ocupacion').value;
+            const nivelestudio = document.getElementById('nivelestudio').value;
+            const niveleconomico = document.getElementById('niveleconomico').value;
+            const creencia = document.getElementById('creencia').value;
+
+            if (!nombre || !edad || !ocupacion || !genero || !rolfamilia || !estadocivil || !nivelestudio || !niveleconomico) {
+                alert('Por favor, complete toda la información personal obligatoria.');
+                return;
+            }
+            enviarDatosAGoogleSheets();
+
+            // Calcular puntuaciones por dimensión
+            const scores = {};
+            Object.values(dimensions).forEach(dim => {
+                const key = Object.keys(dimensions).find(k => dimensions[k] === dim);
+                scores[key] = 0;
+            });
+
+            // Calcular puntuaciones
+            for (let i = 1; i <= 90; i++) {
+                const dimension = questionToDimension[i];
+                const answer = answers[i];
+                let score = 0;
+
+                if (inverseQuestions.includes(i)) {
+                    // Pregunta inversa: F = 1, V = 0
+                    score = answer === 'F' ? 1 : 0;
+                } else {
+                    // Pregunta normal: V = 1, F = 0
+                    score = answer === 'V' ? 1 : 0;
+                }
+
+                scores[dimension] += score;
+            }
+
+            displayResults(scores);
+        }
+
+        function getCategory(dimension, score) {
+            const ranges = baremos[dimension];
+            for (const [category, range] of Object.entries(ranges)) {
+                if (range.includes(score)) {
+                    return category;
+                }
+            }
+            return 'promedio'; // default
+        }
+
+        function displayResults(scores) {
+            // Ocultar cuestionario y mostrar resultados
+            document.getElementById('questionnaireSection').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+
+            const personalData = document.getElementById('personalData');
+            personalData.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h3>Información del Evaluado</h3>
+                    <p><strong>Código:</strong> ${document.getElementById('codigo').value || 'No especificado'}</p>
+                    <p><strong>Nombre:</strong> ${document.getElementById('nombre').value}</p>
+                    <p><strong>Edad:</strong> ${document.getElementById('edad').value} años</p>
+                    <p><strong>Género:</strong> ${document.getElementById('genero').value}</p>
+                    <p><strong>Rol en la Familia:</strong> ${document.getElementById('rolfamilia').value}</p>
+                    <p><strong>Estado Civil:</strong> ${document.getElementById('estadocivil').value}</p>
+                    <p><strong>Ocupación:</strong> ${document.getElementById('ocupacion').value}</p>
+                    <p><strong>Nivel de Estudio:</strong> ${document.getElementById('nivelestudio').value}</p>
+                    <p><strong>Nivel Económico:</strong> ${document.getElementById('niveleconomico').value}</p>
+                    <p><strong>Creencia:</strong> ${document.getElementById('creencia').value || 'No especificado'}</p>
+                </div>
+            `;
+
+
+            // Mostrar resultados por dimensión
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+
+            const areas = {
+                'RELACIONES': ['CO', 'EX', 'CT'],
+                'DESARROLLO': ['AU', 'AC', 'IC', 'SR', 'MR'],
+                'ESTABILIDAD': ['OR', 'CN']
+            };
+
+            Object.entries(areas).forEach(([areaName, areaDimensions]) => {
+                const areaDiv = document.createElement('div');
+                areaDiv.innerHTML = <h3 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">${areaName}</h3>;
+
+                areaDimensions.forEach(dim => {
+                    const score = scores[dim];
+                    const category = getCategory(dim, score);
+                    const categoryText = {
+                        'excelente': 'Excelente',
+                        'buena': 'Buena',
+                        'promedio': 'Promedio',
+                        'mala': 'Mala',
+                        'deficitaria': 'Deficitaria'
+                    }[category];
+
+                    const dimDiv = document.createElement('div');
+                    dimDiv.className = 'dimension-card';
+                    dimDiv.innerHTML = `
+                        <div class="dimension-name">${dimensions[dim]}</div>
+                        <div class="dimension-score">${score}/9</div>
+                        <div class="dimension-category category-${category}">${categoryText}</div>
+                    `;
+                    areaDiv.appendChild(dimDiv);
+                });
+
+                resultsGrid.appendChild(areaDiv);
+            });
+
+            // Crear gráfico
+            createChart(scores);
+
+            // Generar interpretación
+            generateInterpretation(scores);
+        }
+
+        function createChart(scores) {
+            const canvas = document.getElementById('profileChart');
+            const ctx = canvas.getContext('2d');
+
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 80;
+            const chartWidth = width - 2 * margin;
+            const chartHeight = height - 2 * margin;
+
+            // Configurar gráfico
+            const maxScore = 9;
+            const dimensions = Object.keys(scores);
+            const stepX = chartWidth / (dimensions.length - 1);
+            const stepY = chartHeight / maxScore;
+
+            // Dibujar grid
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+
+            // Líneas horizontales (puntajes)
+            for (let i = 0; i <= maxScore; i++) {
+                const y = margin + chartHeight - (i * stepY);
+                ctx.beginPath();
+                ctx.moveTo(margin, y);
+                ctx.lineTo(margin + chartWidth, y);
+                ctx.stroke();
+
+                // Etiquetas de puntaje
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(i.toString(), margin - 10, y + 4);
+            }
+
+            // Líneas verticales (dimensiones)
+            dimensions.forEach((dim, index) => {
+                const x = margin + (index * stepX);
+                ctx.beginPath();
+                ctx.moveTo(x, margin);
+                ctx.lineTo(x, margin + chartHeight);
+                ctx.stroke();
+
+                // Etiquetas de dimensiones
+                ctx.save();
+                ctx.translate(x, margin + chartHeight + 20);
+                ctx.rotate(-Math.PI / 4);
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(dim, 0, 0);
+                ctx.restore();
+            });
+
+            // Dibujar línea de perfil
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            dimensions.forEach((dim, index) => {
+                const x = margin + (index * stepX);
+                const y = margin + chartHeight - (scores[dim] * stepY);
+
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.stroke();
+
+            // Dibujar puntos
+            ctx.fillStyle = '#e74c3c';
+            dimensions.forEach((dim, index) => {
+                const x = margin + (index * stepX);
+                const y = margin + chartHeight - (scores[dim] * stepY);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // Título del gráfico
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Perfil del Clima Familiar', width / 2, 30);
+
+            // Leyenda de áreas
+            const legendY = height - 20;
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillText('RELACIONES', margin + 50, legendY);
+            ctx.fillStyle = '#2ecc71';
+            ctx.fillText('DESARROLLO', margin + 200, legendY);
+            ctx.fillStyle = '#9b59b6';
+            ctx.fillText('ESTABILIDAD', margin + 350, legendY);
+        }
+
+        function generateInterpretation(scores) {
+            const interpretation = document.getElementById('interpretation');
+
+            // Calcular promedios por área
+            const relacionesPromedio = (scores.CO + scores.EX + (9 - scores.CT)) / 3; // CT es inverso
+            const desarrolloPromedio = (scores.AU + scores.AC + scores.IC + scores.SR + scores.MR) / 5;
+            const estabilidadPromedio = (scores.OR + scores.CN) / 2;
+
+            let interpretationText = '<h3>Interpretación del Perfil</h3>';
+
+            // Interpretación general
+            const promedioGeneral = (relacionesPromedio + desarrolloPromedio + estabilidadPromedio) / 3;
+
+            if (promedioGeneral >= 6) {
+                interpretationText += '<p><strong>Clima Familiar General:</strong> <span style="color: #27ae60;">FUNCIONAL</span> - El ambiente familiar muestra características positivas que favorecen el desarrollo personal.</p>';
+            } else if (promedioGeneral >= 4) {
+                interpretationText += '<p><strong>Clima Familiar General:</strong> <span style="color: #f39c12;">MODERADAMENTE FUNCIONAL</span> - El ambiente familiar presenta tanto fortalezas como áreas de mejora.</p>';
+            } else {
+                interpretationText += '<p><strong>Clima Familiar General:</strong> <span style="color: #e74c3c;">DISFUNCIONAL</span> - El ambiente familiar presenta dificultades significativas que pueden afectar el bienestar de los miembros.</p>';
+            }
+
+            // Interpretación por áreas
+            interpretationText += '<h4>Análisis por Áreas:</h4>';
+
+            // Área de Relaciones
+            interpretationText += '<p><strong>RELACIONES:</strong> ';
+            if (relacionesPromedio >= 5) {
+                interpretationText += 'La familia muestra buena cohesión, comunicación abierta y manejo adecuado de conflictos.';
+            } else {
+                interpretationText += 'Se observan dificultades en la unión familiar, comunicación limitada o presencia de conflictos frecuentes.';
+            }
+            interpretationText += '</p>';
+
+            // Área de Desarrollo
+            interpretationText += '<p><strong>DESARROLLO:</strong> ';
+            if (desarrolloPromedio >= 5) {
+                interpretationText += 'El ambiente familiar favorece el crecimiento personal, la autonomía y el desarrollo de intereses diversos.';
+            } else {
+                interpretationText += 'Existen limitaciones en el fomento del desarrollo personal, autonomía o participación en actividades enriquecedoras.';
+            }
+            interpretationText += '</p>';
+
+            // Área de Estabilidad
+            interpretationText += '<p><strong>ESTABILIDAD:</strong> ';
+            if (estabilidadPromedio >= 5) {
+                interpretationText += 'La familia mantiene una estructura organizacional clara con normas y controles apropiados.';
+            } else {
+                interpretationText += 'Se observa desorganización familiar o dificultades en el establecimiento de normas y límites.';
+            }
+            interpretationText += '</p>';
+
+            // Recomendaciones
+            interpretationText += '<h4>Recomendaciones:</h4>';
+            interpretationText += '<ul style="margin-left: 20px;">';
+
+            if (scores.CO < 4) interpretationText += '<li>Fomentar actividades familiares que promuevan la unión y el apoyo mutuo.</li>';
+            if (scores.EX < 4) interpretationText += '<li>Crear espacios para la comunicación abierta y expresión de sentimientos.</li>';
+            if (scores.CT > 5) interpretationText += '<li>Desarrollar estrategias de resolución de conflictos de manera constructiva.</li>';
+            if (scores.AU < 4) interpretationText += '<li>Promover la independencia y toma de decisiones individuales apropiadas.</li>';
+            if (scores.OR < 4) interpretationText += '<li>Establecer rutinas y organización en el hogar.</li>';
+            if (scores.CN < 3 || scores.CN > 7) interpretationText += '<li>Equilibrar las normas familiares: ni muy rígidas ni muy permisivas.</li>';
+
+            interpretationText += '</ul>';
+
+            interpretation.innerHTML = interpretationText;
+        }
+
+        function resetQuestionnaire() {
+            clearAnswers();
+
+            document.getElementById('codigo').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('edad').value = '';
+            document.getElementById('genero').value = '';
+            document.getElementById('rolfamilia').value = '';
+            document.getElementById('estadocivil').value = '';
+            document.getElementById('ocupacion').value = '';
+            document.getElementById('nivelestudio').value = '';
+            document.getElementById('niveleconomico').value = '';
+            document.getElementById('creencia').value = '';
+
+
+            // Mostrar cuestionario y ocultar resultados
+            document.getElementById('questionnaireSection').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+
+            // Scroll al inicio
+            window.scrollTo(0, 0);
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        // Inicializar el cuestionario cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeQuestionnaire();
+            // Establecer fecha actual por defecto
+            document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+        });
+
+        // Estilo de impresión
+        const printStyle = document.createElement('style');
+        printStyle.textContent = `
+            @media print {
+                body { background: white !important; }
+                .container { box-shadow: none !important; }
+                .header { background: #2c3e50 !important; -webkit-print-color-adjust: exact; }
+                .btn, .progress-bar { display: none !important; }
+                .chart-container { page-break-inside: avoid; }
+                .dimension-card { page-break-inside: avoid; }
+            }
+        `;
+        document.head.appendChild(printStyle);
+        
+        function enviarDatosAGoogleSheets() {
+            const datos = {
+                fila: [
+                    document.getElementById('codigo').value,
+                    document.getElementById('nombre').value,
+                    document.getElementById('edad').value,
+                    document.getElementById('genero').value,
+                    document.getElementById('rolfamilia').value,
+                    document.getElementById('estadocivil').value,
+                    document.getElementById('ocupacion').value,
+                    document.getElementById('nivelestudio').value,
+                    document.getElementById('niveleconomico').value,
+                    document.getElementById('creencia').value,
+                    ...Object.values(answers)
+                ]
+            };
+
+            fetch("https://script.google.com/macros/s/AKfycbzmV2wSVspNyFUjC8XgHlkXl1jrweYeMW2FRW1AO2flyCiPaBFFkrWtyIv2qt1FF-XN/exec", {
+                method: "POST",
+                mode: "no-cors",  // si solo quieres enviar sin esperar respuesta
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(() => {
+                alert("Datos enviados correctamente.");
+            })
+            .catch((error) => {
+                console.error("Error al enviar los datos:", error);
+                alert("Hubo un error al enviar los datos.");
+            });
+        }
+
+    </script>
+</body>
+
+</html>
