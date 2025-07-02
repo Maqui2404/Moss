@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Cuestionarios - Investigación Doctoral</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #1a1a1a;
+            --tertiary: #333333;
+            --accent: #666666;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --background: #ffffff;
+            --surface: #fafafa;
+            --surface-elevated: #f5f5f5;
+            --border: #e5e5e5;
+            --border-light: #f0f0f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        *::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .header .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .header .author {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .header .institution {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .intro-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 50px 40px;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .intro-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .intro-content {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .methodology-section {
+            margin-bottom: 60px;
+        }
+
+        .methodology-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .process-step {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .process-step:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .questionnaires-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .questionnaires-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        .questionnaire-card {
+            background: var(--background);
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            padding: 40px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .questionnaire-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            flex-grow: 1;
+            font-size: 0.9rem;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-duration, .card-questions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .ethics-notice {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .ethics-notice h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ethics-notice p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .footer-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            .intro-section {
+                padding: 30px 24px;
+                margin-bottom: 40px;
+            }
+
+            .questionnaires-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .questionnaire-card {
+                padding: 30px;
+                min-height: 240px;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header {
+                margin-bottom: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .questionnaire-card {
+                padding: 24px;
+            }
+
+            .intro-section {
+                padding: 24px 20px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .questionnaire-card:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Investigación Doctoral en Salud Pública</h1>
+            <div class="subtitle">Inteligencia Emocional y Dinámicas Familiares</div>
+            <div class="author">Ps. Leonardo...</div>
+            <div class="institution">Programa de Doctorado</div>
+        </header>
+
+        <section class="intro-section">
+            <h2>Protocolo de Evaluación Psicológica</h2>
+            <div class="intro-content">
+                <p>La presente investigación tiene como objetivo evaluar la <strong>inteligencia emocional</strong> y las <strong>dinámicas familiares</strong> mediante instrumentos psicométricos validados. Su participación contribuirá al desarrollo de conocimiento científico en el área de salud mental familiar.</p>
+                <p>El protocolo consta de tres fases de evaluación que permitirán obtener un perfil comprensivo de las variables estudiadas.</p>
+            </div>
+        </section>
+
+        <section class="methodology-section">
+            <h2 class="methodology-title">Metodología de Evaluación</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Fase Pre-Test</div>
+                    <div class="step-description">
+                        <strong>a)</strong> Inventario de Cociente Emocional de BarOn (ICE)<br>
+                        <strong>b)</strong> Escala del Clima Social Familiar (FES-R) – Moos
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Evaluación Principal</div>
+                    <div class="step-description">
+                        <strong>Test Eneagrama de la Personalidad</strong><br>
+                        Evaluación de tipos de personalidad y niveles de integración psicológica. Incluye análisis de patrones de comportamiento bajo estrés y recomendaciones clínicas.
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Fase Post-Test</div>
+                    <div class="step-description">
+                        Reevaluación proyectiva basada en la pregunta de investigación: <strong>"¿Su funcionamiento personal y familiar experimentaría mejoría?"</strong> Proyección a 12 meses.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="questionnaires-section">
+            <h2 class="section-title">Instrumentos de Evaluación</h2>
+            <div class="questionnaires-grid">
+                <div class="questionnaire-card fade-in" onclick="window.location.href='#'" tabindex="0" role="button">
+                    <div class="card-icon">IE</div>
+                    <h3 class="card-title">Inventario de Cociente Emocional BarOn (ICE)</h3>
+                    <p class="card-description">
+                        Instrumento psicométrico que evalúa la inteligencia emocional a través de cinco componentes: intrapersonal, interpersonal, manejo del estrés, adaptabilidad y estado de ánimo general. Validado internacionalmente para población adulta.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-duration">
+                            <span>Duración:</span>
+                            <span>15-20 min</span>
+                        </div>
+                        <div class="card-questions">
+                            <span>Ítems:</span>
+                            <span>60</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="questionnaire-card fade-in" onclick="window.location.href='Uno/index.html'" tabindex="0" role="button">
+                    <div class="card-icon">CS</div>
+                    <h3 class="card-title">Escala del Clima Social Familiar (FES-R)</h3>
+                    <p class="card-description">
+                        Instrumento de Moos que mide las características socio-ambientales de la familia, evaluando dimensiones de Relación, Desarrollo y Estabilidad. Ampliamente utilizado en investigación familiar.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-duration">
+                            <span>Duración:</span>
+                            <span>12-18 min</span>
+                        </div>
+                        <div class="card-questions">
+                            <span>Ítems:</span>
+                            <span>90</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="questionnaire-card fade-in" onclick="window.location.href='Dos/index.html'" tabindex="0" role="button">
+                    <div class="card-icon">EN</div>
+                    <h3 class="card-title">Test Eneagrama de la Personalidad</h3>
+                    <p class="card-description">
+                        Evaluación de tipos de personalidad basada en el sistema del Eneagrama. Identifica patrones de comportamiento, motivaciones profundas y niveles de integración psicológica. Incluye análisis clínico personalizado.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-duration">
+                            <span>Duración:</span>
+                            <span>10-15 min</span>
+                        </div>
+                        <div class="card-questions">
+                            <span>Ítems:</span>
+                            <span>45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ethics-notice">
+            <h3>Consideraciones Éticas</h3>
+            <p>Esta investigación cumple con los estándares éticos internacionales para investigación en salud. Todos los datos son tratados con estricta confidencialidad y anonimato, siguiendo los protocolos establecidos por los comités de ética en investigación.</p>
+        </section>
+
+        <footer class="footer">
+            <h3 class="footer-title">Instrucciones para Participantes</h3>
+            <p class="footer-description">Seleccione cualquiera de los instrumentos de evaluación para iniciar el proceso de investigación</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -30px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const focusedElement = document.activeElement;
+                if (focusedElement.classList.contains('questionnaire-card')) {
+                    e.preventDefault();
+                    focusedElement.click();
+                }
+            }
+        });
+
+        document.querySelectorAll('.questionnaire-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

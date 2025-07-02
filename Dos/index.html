@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test de Eneagrama - Personalidad</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #0c0c0c;
+        --secondary: #1a1a1a;
+        --accent: #6366f1;
+        --accent-light: #8b5cf6;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --text-muted: #94a3b8;
+        --surface: #ffffff;
+        --surface-elevated: #f8fafc;
+        --surface-hover: #f1f5f9;
+        --border: #e2e8f0;
+        --border-light: #f1f5f9;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --error: #ef4444;
+        --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+          0 8px 10px -6px rgb(0 0 0 / 0.1);
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--surface-elevated);
+        color: var(--text-primary);
+        line-height: 1.6;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--surface);
+        border-radius: 24px;
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        border: 1px solid var(--border-light);
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        color: white;
+        padding: 60px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+          repeat;
+      }
+
+      .header h1 {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 700;
+        margin-bottom: 16px;
+        letter-spacing: -0.025em;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        font-weight: 300;
+        position: relative;
+        z-index: 1;
+        letter-spacing: 0.025em;
+      }
+
+      .personal-info {
+        padding: 60px 40px;
+        background: var(--surface);
+      }
+
+      .personal-info h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        margin-bottom: 40px;
+        color: var(--text-primary);
+        letter-spacing: -0.025em;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+        margin-bottom: 32px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-weight: 500;
+        color: var(--text-primary);
+        font-size: 0.875rem;
+        letter-spacing: 0.025em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .form-group input,
+      .form-group select {
+        padding: 16px 20px;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: inherit;
+        background: var(--surface);
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+        appearance: none;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+        transform: translateY(-1px);
+      }
+
+      .form-group input:hover,
+      .form-group select:hover {
+        border-color: var(--text-secondary);
+      }
+
+      .form-group select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 16px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 52px;
+      }
+
+      .instructions {
+        padding: 40px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: none;
+        margin: 0;
+        border-radius: 0;
+        position: relative;
+      }
+
+      .instructions::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--warning);
+        border-radius: 0 4px 4px 0;
+      }
+
+      .instructions h3 {
+        color: #92400e;
+        margin-bottom: 20px;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      .instructions p {
+        color: #92400e;
+        line-height: 1.7;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+      }
+
+      .questionnaire {
+        padding: 40px;
+        max-height: 70vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+      }
+
+      .questionnaire::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .questionnaire::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .questionnaire::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
+
+      .question {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        padding: 24px;
+        background: var(--surface-elevated);
+        border-radius: 16px;
+        border: 1px solid var(--border-light);
+        transition: all 0.2s ease;
+      }
+
+      .question:hover {
+        background: var(--surface-hover);
+        border-color: var(--border);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .question-number {
+        font-weight: 600;
+        color: var(--accent);
+        margin-right: 20px;
+        min-width: 40px;
+        font-size: 0.875rem;
+        background: rgb(99 102 241 / 0.1);
+        padding: 6px 12px;
+        border-radius: 8px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .question-text {
+        flex: 1;
+        font-size: 1rem;
+        color: var(--text-primary);
+        line-height: 1.6;
+        margin-right: 24px;
+        font-weight: 400;
+      }
+
+      .question-options {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+
+      .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        min-width: 120px;
+        justify-content: center;
+      }
+
+      .radio-group:hover {
+        background: rgb(99 102 241 / 0.05);
+      }
+
+      .radio-group input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--accent);
+      }
+
+      .radio-group label {
+        font-weight: 500;
+        cursor: pointer;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        user-select: none;
+      }
+
+      .progress-bar {
+        position: sticky;
+        top: 0;
+        background: var(--surface);
+        padding: 24px 40px;
+        border-bottom: 1px solid var(--border-light);
+        z-index: 100;
+        backdrop-filter: blur(8px);
+      }
+
+      .progress-container {
+        background: var(--border-light);
+        height: 6px;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        width: 0%;
+        transition: width 0.3s ease;
+        border-radius: 3px;
+      }
+
+      .progress-text {
+        text-align: center;
+        margin-top: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      .button-container {
+        padding: 40px;
+        text-align: center;
+        background: var(--surface-elevated);
+        border-top: 1px solid var(--border-light);
+      }
+
+      .btn {
+        padding: 16px 32px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0 8px;
+        font-family: inherit;
+        letter-spacing: 0.025em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      .btn-secondary {
+        background: var(--surface);
+        color: var(--text-secondary);
+        border: 1.5px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--surface-hover);
+        border-color: var(--text-secondary);
+        transform: translateY(-1px);
+      }
+
+      .results {
+        display: none;
+        padding: 40px;
+      }
+
+      .results h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: var(--text-primary);
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      .enneagram-result {
+        background: var(--surface-elevated);
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid var(--border-light);
+        margin-bottom: 32px;
+        text-align: center;
+      }
+
+      .enneagram-type {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+
+      .enneagram-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .enneagram-description {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .recommendations {
+        background: linear-gradient(
+          135deg,
+          rgb(99 102 241 / 0.05),
+          rgb(139 92 246 / 0.05)
+        );
+        padding: 32px;
+        border-radius: 20px;
+        border: 1px solid rgb(99 102 241 / 0.1);
+        position: relative;
+        margin-top: 32px;
+      }
+
+      .recommendations::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--accent);
+        border-radius: 0 4px 4px 0;
+      }
+
+      .recommendations h3 {
+        color: var(--accent);
+        margin-bottom: 24px;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .recommendation-item {
+        background: var(--surface);
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        border-left: 3px solid var(--accent);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+      }
+
+      .scores-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+
+      .score-card {
+        background: var(--surface-elevated);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-light);
+        text-align: center;
+      }
+
+      .score-type {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+
+      .score-value {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 20px;
+          border-radius: 16px;
+        }
+
+        .header {
+          padding: 40px 24px;
+        }
+
+        .personal-info {
+          padding: 40px 24px;
+        }
+
+        .instructions {
+          padding: 24px;
+        }
+
+        .questionnaire {
+          padding: 24px;
+        }
+
+        .question {
+          flex-direction: column;
+          gap: 20px;
+          padding: 20px;
+        }
+
+        .question-text {
+          margin-right: 0;
+        }
+
+        .question-options {
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .radio-group {
+          min-width: 100px;
+          font-size: 0.8rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+
+        .progress-bar {
+          padding: 20px 24px;
+        }
+
+        .button-container {
+          padding: 32px 24px;
+        }
+
+        .btn {
+          display: block;
+          width: 100%;
+          margin: 8px 0;
+        }
+
+        .results {
+          padding: 24px;
+        }
+
+        .scores-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+      }
+
+      /* Loading state */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      /* Focus visible for accessibility */
+      .btn:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom selection */
+      ::selection {
+        background: rgb(99 102 241 / 0.2);
+        color: var(--text-primary);
+      }
+      .recommendations {
+        margin-top: 30px;
+        padding: 20px;
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .recommendations h3 {
+        color: var(--accent);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+
+      .recommendation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .recommendation-item {
+        position: relative;
+        background: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        border-left: 4px solid var(--accent);
+      }
+
+      .recommendation-item::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 14px;
+        bottom: 14px;
+        width: 6px;
+        border-radius: 0 100px 100px 0;
+        background: var(--accent);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Test de Eneagrama</h1>
+        <p>Descubre tu Tipo de Personalidad</p>
+      </div>
+
+      <div id="personalInfo" class="personal-info">
+        <h2>Información Personal</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="codigo">Número de Celular:</label>
+            <input type="text" id="codigo" name="codigo" />
+          </div>
+          <div class="form-group">
+            <label for="nombre">Apellidos y Nombres:</label>
+            <input type="text" id="nombre" name="nombre" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edad">Edad:</label>
+            <input
+              type="number"
+              id="edad"
+              name="edad"
+              min="10"
+              max="100"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="genero">Género:</label>
+            <select name="genero" id="genero">
+              <option value="">Seleccione</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rolfamilia">Rol en la Familia:</label>
+            <select name="rolfamilia" id="rolfamilia">
+              <option value="">Seleccione</option>
+              <option value="Padre">Padre</option>
+              <option value="Madre">Madre</option>
+              <option value="Hijo">Hij@</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="estadocivil">Estado Civil:</label>
+            <select id="estadocivil" name="estadocivil">
+              <option value="">Seleccione</option>
+              <option value="Soltero">Soltero</option>
+              <option value="Conviviente">Conviviente</option>
+              <option value="Casado">Casado</option>
+              <option value="Viudo">Viudo</option>
+              <option value="Otro">Otro</option>
+              <option value="Prefieronoresponder">Prefiero no responder</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ocupacion">Ocupación:</label>
+            <input type="text" id="ocupacion" name="ocupacion" required />
+          </div>
+          <div class="form-group">
+            <label for="nivelestudio">Nivel de Estudio:</label>
+            <select id="nivelestudio" name="nivelestudio">
+              <option value="">Seleccione</option>
+              <option value="Sin estudios">Sin estudios</option>
+              <option value="Educación Primaria Incompleta">
+                Educación Primaria Incompleta
+              </option>
+              <option value="Educación Primaria Completa">
+                Educación Primaria Completa
+              </option>
+              <option value="Educación Secundaria Incompleta">
+                Educación Secundaria Incompleta
+              </option>
+              <option value="Educación Secundaria Completa">
+                Educación Secundaria Completa
+              </option>
+              <option value="Técnico Incompleto">Técnico Incompleto</option>
+              <option value="Técnico Completo">Técnico Completo</option>
+              <option value="Universitario Incompleto">
+                Universitario Incompleto
+              </option>
+              <option value="Universidad Completa">Universidad Completa</option>
+              <option value="Postgrado (Maestría o Doctorado)">
+                Postgrado (Maestría o Doctorado)
+              </option>
+              <option value="Prefiero no Responder">
+                Prefiero no Responder
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="niveleconomico">Nivel Económico:</label>
+            <select id="niveleconomico" name="niveleconomico">
+              <option value="">Seleccione</option>
+              <option value="Alto">Alto</option>
+              <option value="Medio">Medio</option>
+              <option value="Bajo">Bajo</option>
+              <option value="Vulnerable">Vulnerable</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="creencia">Creencia:</label>
+            <input type="text" id="creencia" name="creencia" />
+          </div>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <h3>INSTRUCCIONES</h3>
+        <p>
+          Para cada afirmación, indica qué tan de acuerdo estás utilizando la
+          siguiente escala:
+        </p>
+        <p>
+          <strong>1:</strong> Totalmente en desacuerdo | <strong>2:</strong> En
+          desacuerdo | <strong>3:</strong> Neutral | <strong>4:</strong> De
+          acuerdo | <strong>5:</strong> Totalmente de acuerdo
+        </p>
+        <p>
+          <strong>Recuerde que NO HAY respuestas buenas ni malas.</strong>
+          Responda de forma honesta y espontánea según como se siente
+          normalmente.
+        </p>
+      </div>
+
+      <div id="questionnaireSection">
+        <div class="progress-bar">
+          <div class="progress-container">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text" id="progressText">
+            0 de 180 preguntas completadas (0%)
+          </div>
+        </div>
+
+        <div class="questionnaire" id="questionnaire">
+          <!-- Las preguntas se generarán dinámicamente con JavaScript -->
+        </div>
+
+        <div class="button-container">
+          <button class="btn btn-secondary" onclick="clearAnswers()">
+            Limpiar Respuestas
+          </button>
+          <button class="btn btn-primary" onclick="calculateResults()">
+            Calcular Resultados
+          </button>
+        </div>
+      </div>
+
+      <div id="results" class="results">
+        <h2>Resultados del Test de Eneagrama</h2>
+
+        <div id="personalData"></div>
+
+        <div class="scores-grid" id="scoresGrid">
+          <!-- Las puntuaciones se generarán dinámicamente -->
+        </div>
+
+        <div class="enneagram-result" id="mainResult">
+          <!-- El resultado principal se generará dinámicamente -->
+        </div>
+
+        <div class="recommendations" id="recommendations">
+          <!-- Las recomendaciones se generarán dinámicamente -->
+        </div>
+
+        <div class="button-container">
+          <button class="btn btn-secondary" onclick="resetQuestionnaire()">
+            Nueva Evaluación
+          </button>
+          <button class="btn btn-primary" onclick="printResults()">
+            Imprimir Resultados
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Definición de preguntas del eneagrama
+      const enneagramQuestions = {
+        1: [
+          "Tengo tendencia instintiva a evaluar situaciones",
+          "Suelo irritarme cuando las cosas no funcionan como deberían",
+          //   "Soy metódico y organizado en mi trabajo",
+          //   "Suelo sentirme culpable si las cosas no salen bien",
+          //   "Mi sentido del deber me lleva a sacrificar el tiempo dedicado al ocio y al descanso",
+          //   "Por naturaleza soy crítico conmigo mismo y con los demás",
+          //   "Me siento con frecuencia tenso y frustrado",
+          //   "Mi conciencia me induce a actuar rectamente, aunque vaya en contra de mis intereses",
+          //   "Con frecuencia, tengo la sensación de que el tiempo pasa demasiado deprisa y que todavía quedan muchas cosas por hacer",
+          //   "Tengo la tendencia a ser perfeccionista",
+          //   "Me turbo cuando algo no es justo",
+          //   "Siento la necesidad de mejorar lo que no va bien como contribución para construir un mundo mejor",
+          //   "Tiendo mucho a cuidar los detalles, el orden y la precisión",
+          //   "Me esfuerzo siempre por realizar mis ideas, aunque esto me exija mucho esfuerzo y fatiga",
+          //   'Tiendo a juzgar todas las cosas con las categorías de "correcto — equivocado" "bueno — malo"',
+          //   "Noto a primera vista si alguna cosa no va bien o está fuera de lugar",
+          //   "A veces los demás opinan que soy antipático porque soy muy exigente con ellos",
+          //   "Tiendo continuamente a corregir mis defectos",
+          //   "Mirando a mí alrededor, veo que muchas personas no viven los principios éticos como yo",
+          //   "Depende tanto de mí que se hagan las cosas, que tengo que ser más organizado y metódico que los demás",
+        ],
+        2: [
+          "Muchas personas dependen de mi ayuda y mi generosidad",
+          //   "Me siento contento cuando los demás tienen necesidad de mí",
+          //   "Pienso siempre en los demás, descuidando mis necesidades",
+          //   "Me gusta halagar a las personas",
+          //   "Me gusta socorrer a las personas cuando se encuentran en dificultades o en situaciones embarazosas",
+          //   "Queriéndolo o no, me siento impulsado a ayudar",
+          //   "Con frecuencia las personas me piden consuelo o consejo",
+          //   "Pienso que los demás tienen más necesidades que yo",
+          //   "A veces siento un cierto resentimiento cuando la gente no se muestra agradecida por lo que hago por ellos",
+          //   "Trato de establecer una relación estrecha con las personas",
+          //   "La dimensión afectiva es determinante para mí",
+          //   "Cuando estoy en grupo, privilegio las relaciones sociales por encima del objetivo de la reunión",
+          //   "Pienso que no impongo mis ideas a las personas, pero si lo hago es por su bien",
+          //   "Soy yo quien mantiene el contacto con mis amigos, más que ellos conmigo",
+          //   "Estoy contento de sacrificarme por los demás, con tal de hacerlos felices",
+          //   "Al actuar sigo ordinariamente el instinto y las emociones",
+          //   "A veces corro el riesgo de ser demasiado entrometido y sofocante con los demás",
+          //   "Para sentir que estoy vivo, necesito las relaciones con los demás",
+          //   "Hago un esfuerzo especial por saber qué les pasa a las personas que quiero",
+          //   'Me considero algo así como "un sanador de corazones rotos"',
+        ],
+        3: [
+          "Tengo un nivel de energía muy alto",
+          "Me gusta el trabajo en equipo y lo promuevo válidamente",
+          //   "Valoro la eficacia y la profesionalidad",
+          //   "Me nace espontáneamente ocuparme de la organización y éxito de un proyecto",
+          //   "Tengo una visión clara de los objetivos y trabajo con tenacidad para alcanzarlos",
+          //   "Es importante para mí tener criterios para evaluar la marcha de las cosas",
+          //   "Tengo necesidad de protagonismo y estoy atento a proyectar una buena imagen de mí",
+          //   "Para tener éxito, en ocasiones, es necesario renunciar a los propios principios",
+          //   "Vivo con una cierta tensión porque me propongo demasiados objetivos",
+          //   "Me siento molesto cuando critican mi trabajo",
+          //   "Normalmente prefiero implicarme en el inicio de un proyecto más que en su realización",
+          //   "Me identifico hasta tal punto con el trabajo y con mi rol que descuido mis sentimientos",
+          //   "Tengo la capacidad de ser persuasivo y convincente al promover una idea o un proyecto",
+          //   "Tiendo a ser seguro y decidido",
+          //   "Puedo utilizar a las personas para conseguir mis objetivos",
+          //   "Soy una persona emprendedora con fuertes motivaciones",
+          //   "Actúo con rapidez",
+          //   "Mi entusiasmo y optimismo pueden contagiar a los demás",
+          //   "Para bien o para mal, soy bueno para encubrir mis inseguridades",
+          //   "Acepto los retos de los que puedo salir con éxito",
+        ],
+        4: [
+          "Aprecio la belleza de la vida más que la mayoría de las personas",
+          "Tengo una tendencia a la nostalgia y la melancolía que me llevan al pasado",
+          //   "Me atrae lo simbólico, a menudo me comunico a través de símbolos",
+          //   "Con frecuencia me dejo transportar a un mundo de imaginación y fantasía",
+          //   "Frecuentemente soy incomprendido por los demás",
+          //   "Soy muy sensible al sufrimiento de los demás",
+          //   "Me preocupo de hacer las cosas con gusto y de dar un estilo particular al ambiente en el que vivo",
+          //   "Me considero una persona poco ordinaria",
+          //   "Con frecuencia pienso en la muerte y el sufrimiento",
+          //   "Me siento insatisfecho cuando no puedo expresar todo lo que siento con la intensidad que lo siento",
+          //   "Me parece sufrir más que los demás la ruptura de una relación",
+          //   "En cualquier relación lo más importante para mí son los sentimientos",
+          //   "Hay quienes se lamentan porque parezco distante o diferente a los demás",
+          //   "Tiendo a idealizar a las personas cuando están lejos de mí",
+          //   "A menudo sólo consigo expresar adecuadamente mis sentimientos a través del canal artístico",
+          //   "Mis estados de ánimo cambian fuertemente, de muy intensos a muy débiles",
+          //   "Me identifico de tal manera con los sentimientos ajenos, que puedo hacer mías sus heridas",
+          //   "Amo las situaciones que producen emociones intensas y profundas",
+          //   "Tengo la sensación de que me falta algo o alguien en mi vida",
+          //   "Me irritan las personas que aprecian mi trabajo, pero no se interesan por mi persona",
+        ],
+        5: [
+          "Generalmente escondo mis sentimientos",
+          "Tiendo a acumular cosas que un día me pudieran resultar útiles",
+          //   "Prefiero no involucrarme en conversaciones superficiales",
+          //   "Me gusta sintetizar y asociar varias ideas",
+          //   "Me disgusta que alguien desee saber lo que siento",
+          //   "Necesito mucho espacio y tiempo para mí",
+          //   "En muchas ocasiones, prefiero observar y dejar a los demás la iniciativa",
+          //   "Me estimula todo aquello que puede ampliar mis horizontes y mis conocimientos",
+          //   "Prefiero llevar bien preparada una intervención en público para evitar el ridículo",
+          //   "Si surge un problema prefiero reflexionarlo a solas antes de discutirlo con los demás",
+          //   "Me esfuerzo en analizar las cosas y en permanecer objetivo para no parecer superficial o ingenuo",
+          //   "Suelo ser poco generoso al compartir mi tiempo, mis ideas o mi dinero",
+          //   "Me irritan las personas que no son lógicas en su modo de hacer o de pensar",
+          //   "Prefiero trabajar solo en un proyecto que hacerlo con un equipo",
+          //   "Temo parecer ridículo cuando me enfado con alguien",
+          //   "Prefiero mantener una cierta distancia de la gente",
+          //   "Tengo dificultad en pedir ayuda a los demás",
+          //   "Por naturaleza soy más bien cauto y reservado",
+          //   "Las expectativas de los demás me irritan; prefiero que la gente me deje en paz",
+          //   "Soy un poco lento a la hora de entrar en acción",
+        ],
+        6: [
+          "Fundamentalmente soy una persona bastante equilibrada",
+          "Considero importante ser fiel al deber y a las personas",
+          //   "Se me hace difícil desobedecer a la autoridad y a las normas establecidas",
+          //   "Antes de tomar una decisión recojo todas las informaciones para evitar un fracaso",
+          //   "Me preocupo de conocer las expectativas y las líneas de acción de mi trabajo",
+          //   "Cuando estoy bajo presión me vuelvo tenso e irritable",
+          //   "Con frecuencia me siento inseguro e indeciso al actuar",
+          //   "Me siento a disgusto con la ambigüedad y advierto fácilmente las contradicciones",
+          //   "Con frecuencia hago las cosas empujado por el sentido del deber y de la responsabilidad",
+          //   "Antes de tomar una decisión prefiero conocer el parecer de otras personas",
+          //   "Aunque normalmente cumplo todo lo que se espera de mí, a veces me puedo rebelar",
+          //   "La prudencia es una virtud muy importante",
+          //   "Me gusta ser preciso en el desarrollo de las tareas que se me han confiado",
+          //   'Tengo un fuerte sentido del "grupo" en lo que toca la familia, la institución y la comunidad',
+          //   "Soy un buen colaborador en el que se puede confiar",
+          //   "Soy propenso a tener muchas dudas que limitan mi libertad",
+          //   "Prefiero sacrificar mi independencia con tal de sentirme seguro",
+          //   "Tengo la tendencia a anticipar e imaginar muchos peligros",
+          //   "Si cometo un error temo que todos me van a criticar de inmediato",
+          //   "Deseo fiarme de las personas, pero suelo descubrirme desconfiando de sus motivos",
+        ],
+        7: [
+          "Prefiero programar cosas interesantes que llevarlas a cabo",
+          "Soy el tipo de persona a la que le gusta probar de todo un poco en la vida",
+          //   "Al final todo se resuelve de la mejor manera posible",
+          //   "Me siento contento de que los demás me consideren una persona feliz",
+          //   "Tiendo a ver el lado positivo de la vida y no el negativo",
+          //   "Me siento bien con casi todas las personas que encuentro",
+          //   "Me gusta divertirme con los amigos, contando cosas humorísticas, cantando o jugando",
+          //   "Soy espontáneo y en relación al futuro soy optimista",
+          //   'Me consideran con frecuencia el "alma del grupo"',
+          //   "Me gusta mucho participar en fiestas, viajar, comer en el restaurante",
+          //   "Evito pensar en situaciones que me inducirían a deprimirse",
+          //   "Procuro que las cosas resulten agradables",
+          //   "Algunas personas me consideran superficial",
+          //   "Me gusta levantar el ánimo a las personas",
+          //   "El sufrimiento me infunde mucho temor",
+          //   "Me resisto a permanecer por largo tiempo en una misma ocupación",
+          //   "Es más fuerte mi entusiasmo que mi perseverancia",
+          //   "Prefiero las conversaciones ligeras y alegres a las serias y profundas",
+          //   "Mi mente está siempre activa: pienso diez cosas a la vez",
+          //   "Tengo dificultad en establecer prioridades porque me gusta hacer todo lo que es estimulante",
+        ],
+        8: [
+          "Me siento capaz de tomar posición y de luchar por aquello en lo que creo",
+          "No soporto a quien cambia de chaqueta en función de las conveniencias",
+          //   "Expreso fácilmente mi desacuerdo con lo que no comparto",
+          //   "No me dejo manipular y soy capaz de enfrentarme a cualquiera",
+          //   "Sé hacer uso de la fuerza, aunque ello pueda intimidar a los demás",
+          //   "Enseguida veo dónde reside el poder en un grupo",
+          //   "Soy una persona realista, decidida y resuelta",
+          //   "No me es fácil expresar mi ternura",
+          //   "Tiendo más a actuar que a detenerme en los sentimientos",
+          //   "La justicia e injusticia son temas importantes para mí",
+          //   'Cuando debo decir "no", lo hago sin dudar',
+          //   "Me molesta mucho que me pongan entre la espada y la pared",
+          //   "No me gusta que me digan que debo conformarme",
+          //   "Me considero un trabajador empedernido",
+          //   "Me irrito cuando se da largas a un asunto",
+          //   "A veces puedo ser demasiado impetuoso e impositivo",
+          //   "Cuando alguien me resulta antipático, suelo encontrar el modo de que se entere",
+          //   "Con frecuencia, el parecer de los demás no me interesa",
+          //   "Poseo una poderosa fuerza interior que se manifiesta en el exterior",
+          //   "Me irrita mucho la lentitud de los demás",
+        ],
+        9: [
+          "La mayor parte de las personas se agitan demasiado",
+          "Por naturaleza soy calmo, tranquilo y conciliador",
+          //   "Me gustan las cosas rutinarias y conocidas",
+          //   "Evito las situaciones de conflicto",
+          //   "No suelo juzgar a las personas",
+          //   "Tiendo a dejar para mañana lo que podría haber hecho hoy",
+          //   "La iniciativa no es mi fuerte: necesito estímulos externos para realizar las cosas",
+          //   "Vivir en paz y armonía es lo más bonito que se puede tener",
+          //   "Mi calma y mi lentitud pueden irritar a otras personas",
+          //   "Puedo ser árbitro imparcial y equilibrado",
+          //   "Me resulta difícil decir que no",
+          //   "Soy propenso a reprimir los sentimientos",
+          //   "Tiendo a relativizar y minimizar las tensiones",
+          //   "Tengo una cierta tendencia a infravalorarme",
+          //   "Soy bastante conservador en mi escala de valores",
+          //   "Tengo cierta dificultad en centrar mi atención",
+          //   "No vale la pena enfadarse cuando las cosas van mal",
+          //   "Soy más propenso a resignarme que a luchar",
+          //   "Me identifico fácilmente con pensamientos o gustos de las personas que amo",
+          //   "Estoy consciente de perder oportunidades en la vida",
+        ],
+      };
+
+      const enneagramTypes = {
+        1: {
+          name: "El Perfeccionista",
+          description:
+            "Tipo racional, idealista, con principios sólidos, determinado, controlado y perfeccionista. Buscan mejorar todo pero temen cometer errores.",
+          recomendaciones: [
+            "Practica la autocompasión: Permítete cometer errores sin juzgarte duramente.",
+            "Establece límites realistas: No todo tiene que ser perfecto para ser valioso.",
+            "Dedica tiempo a actividades relajantes que no tengan un propósito específico.",
+            "Practica la expresión emocional saludable con tu familia.",
+            "Aprende a delegar responsabilidades sin micromanager.",
+            "Cultiva la paciencia con los procesos familiares imperfectos.",
+            "Celebra los pequeños logros familiares, no solo los grandes.",
+            "Practica la comunicación asertiva sin críticas.",
+            "Desarrolla rutinas familiares flexibles que permitan espontaneidad.",
+            "Busca ayuda profesional cuando sientas que el perfeccionismo afecta tu bienestar.",
+          ],
+        },
+        2: {
+          name: "El Ayudador",
+          description:
+            "Tipo interpersonal, servicial, cariñoso y posesivo. Quieren sentirse amados.",
+          recomendaciones: [
+            "Establece límites claros: Aprende a decir 'no' cuando sea necesario.",
+            "Dedica tiempo diario para atender tus propias necesidades emocionales.",
+            "Practica pedir ayuda directamente en lugar de esperar que otros adivinen.",
+            "Desarrolla hobbies o intereses que sean solo para ti.",
+            "Comunica tus sentimientos sin sentirte culpable por tener necesidades.",
+            "Establece momentos familiares donde puedas recibir cuidado de otros.",
+            "Practica la autovalidación sin depender de la aprobación externa.",
+            "Aprende a reconocer y expresar emociones negativas de forma saludable.",
+            "Desarrolla una red de apoyo fuera del núcleo familiar inmediato.",
+            "Busca equilibrio entre dar y recibir en las relaciones familiares.",
+          ],
+        },
+        3: {
+          name: "El Triunfador",
+          description:
+            "Tipo orientado al éxito, adaptable, ambicioso, orientado a objetivos y preocupado por su imagen. Buscan validación a través del logro.",
+          recomendaciones: [
+            "Dedica tiempo de calidad sin agenda ni objetivos específicos con tu familia.",
+            "Practica la vulnerabilidad compartiendo tus miedos y inseguridades.",
+            "Establece límites claros entre el trabajo y la vida familiar.",
+            "Desarrolla rituales familiares que fomenten la conexión emocional.",
+            "Aprende a valorar el proceso, no solo los resultados.",
+            "Practica la escucha activa sin buscar soluciones inmediatas.",
+            "Permítete momentos de descanso sin sentirte improductivo.",
+            "Celebra los logros familiares colectivos, no solo los individuales.",
+            "Desarrolla autenticidad expresando tu verdadero yo, no tu imagen pública.",
+            "Busca actividades familiares que no involucren competencia o logros.",
+          ],
+        },
+        4: {
+          name: "El Individualista",
+          description:
+            "Tipo introspectivo, emocional, sensible y autoexpresivo. Valoran la autenticidad y tienden a la melancolía.",
+          recomendaciones: [
+            "Establece rutinas diarias que te brinden estabilidad emocional.",
+            "Practica la gratitud diaria enfocándote en lo positivo presente.",
+            "Desarrolla canales creativos para expresar emociones constructivamente.",
+            "Comunica tus necesidades emocionales de forma clara y directa.",
+            "Practica mindfulness para permanecer en el momento presente.",
+            "Establece límites con la nostalgia y los pensamientos del pasado.",
+            "Cultiva relaciones familiares basadas en la aceptación mutua.",
+            "Desarrolla actividades que generen sensación de logro y propósito.",
+            "Practica la autocompasión durante los períodos de melancolía.",
+            "Busca equilibrio entre la profundidad emocional y la estabilidad práctica.",
+          ],
+        },
+        5: {
+          name: "El Investigador",
+          description:
+            "Tipo analítico, observador, innovador e independiente. Valoran el conocimiento y la autosuficiencia.",
+          recomendaciones: [
+            "Establece momentos específicos para la conexión emocional familiar.",
+            "Practica compartir tus pensamientos y conocimientos con los demás.",
+            "Desarrolla rituales de conexión que respeten tu necesidad de espacio.",
+            "Aprende a expresar necesidades emocionales de forma directa.",
+            "Establece límites claros sobre tu tiempo personal sin aislarte completamente.",
+            "Practica la participación activa en decisiones familiares importantes.",
+            "Desarrolla formas no verbales de demostrar afecto y cuidado.",
+            "Cultiva la presencia emocional durante las interacciones familiares.",
+            "Aprende a pedir apoyo cuando lo necesites sin sentirte vulnerable.",
+            "Busca equilibrio entre la independencia y la interdependencia familiar.",
+          ],
+        },
+        6: {
+          name: "El Leal",
+          description:
+            "Tipo comprometido, responsable, orientado a la seguridad y a menudo ansioso. Valoran la lealtad y la estabilidad.",
+          recomendaciones: [
+            "Desarrolla confianza en tu propia capacidad de tomar decisiones.",
+            "Practica la comunicación directa de tus preocupaciones y miedos.",
+            "Establece rutinas familiares que generen sensación de seguridad.",
+            "Aprende a confiar en el apoyo familiar sin buscar garantías constantes.",
+            "Desarrolla estrategias de manejo de ansiedad y preocupación excesiva.",
+            "Practica la toma de decisiones graduales sin buscar la decisión perfecta.",
+            "Cultiva la fe en la capacidad de tu familia para superar desafíos.",
+            "Establece límites con pensamientos catastróficos sobre el futuro.",
+            "Desarrolla una red de apoyo confiable fuera del núcleo familiar.",
+            "Practica la autocompasión cuando cometas errores o enfrentes incertidumbre.",
+          ],
+        },
+        7: {
+          name: "El Entusiasta",
+          description:
+            "Tipo espontáneo, versátil, extrovertido y optimista. Buscan experiencias gratificantes y evitan el dolor.",
+          recomendaciones: [
+            "Practica la presencia mindful en las actividades familiares cotidianas.",
+            "Desarrolla la capacidad de profundizar en las emociones difíciles.",
+            "Establece compromisos familiares a largo plazo y manténlos.",
+            "Aprende a sentarte con la incomodidad sin buscar distracciones inmediatas.",
+            "Practica la escucha profunda sin planear la siguiente actividad.",
+            "Desarrolla rituales familiares que fomenten la reflexión y la calma.",
+            "Aprende a procesar emociones negativas sin evitarlas o racionalizarlas.",
+            "Establece límites con las distracciones externas durante el tiempo familiar.",
+            "Cultiva la paciencia con los procesos lentos de crecimiento familiar.",
+            "Practica la gratitud por los momentos simples y cotidianos.",
+          ],
+        },
+        8: {
+          name: "El Desafiador",
+          description:
+            "Tipo asertivo, protector, seguro de sí mismo y dominante. Buscan controlar su entorno y evitar la vulnerabilidad.",
+          recomendaciones: [
+            "Practica la vulnerabilidad compartiendo tus miedos y inseguridades.",
+            "Desarrolla la paciencia con los procesos emocionales de otros.",
+            "Aprende técnicas de comunicación no violenta para expresar desacuerdos.",
+            "Establece momentos familiares donde otros puedan liderar las decisiones.",
+            "Practica la empatía activa antes de expresar tu punto de vista.",
+            "Desarrolla la capacidad de recibir retroalimentación sin defenderte.",
+            "Cultiva la ternura y suavidad en las interacciones familiares íntimas.",
+            "Aprende a pedir perdón cuando sea necesario sin perder tu autenticidad.",
+            "Establece límites con tu intensidad emocional en situaciones familiares.",
+            "Practica el apoyo silencioso sin necesidad de tomar control de las situaciones.",
+          ],
+        },
+        9: {
+          name: "El Pacificador",
+          description:
+            "Tipo receptivo, tranquilizador, complaciente y modesto. Buscan la armonía y evitan los conflictos.",
+          recomendaciones: [
+            "Desarrolla la capacidad de expresar tus opiniones y preferencias claramente.",
+            "Establece límites saludables sin sentirte culpable por tener necesidades.",
+            "Practica la toma de decisiones activa en asuntos familiares importantes.",
+            "Aprende a abordar conflictos de forma constructiva sin evitarlos.",
+            "Desarrolla rutinas que incluyan tiempo para tus propios intereses y metas.",
+            "Practica la comunicación asertiva de tus sentimientos y necesidades.",
+            "Cultiva la energía personal a través de actividades que te motiven.",
+            "Establece prioridades claras y actúa en consecuencia.",
+            "Desarrolla la capacidad de liderar iniciativas familiares ocasionalmente.",
+            "Aprende a mantener tu posición en desacuerdos importantes sin ceder automáticamente.",
+          ],
+        },
+      };
+
+      // Variables globales
+      let currentQuestions = [];
+      let answers = {};
+
+      // Función para inicializar el cuestionario
+      function initializeQuestionnaire() {
+        currentQuestions = [];
+        let questionNumber = 1;
+
+        // Mezclar preguntas de todos los tipos
+        for (let type in enneagramQuestions) {
+          for (let question of enneagramQuestions[type]) {
+            currentQuestions.push({
+              number: questionNumber++,
+              text: question,
+              type: type,
+            });
+          }
+        }
+
+        // Mezclar aleatoriamente las preguntas
+        // currentQuestions = shuffleArray(currentQuestions);
+        renderQuestions();
+      }
+
+      // Función para mezclar array
+      // function shuffleArray(array) {
+      //     for (let i = array.length - 1; i > 0; i--) {
+      //         const j = Math.floor(Math.random() * (i + 1));
+      //         [array[i], array[j]] = [array[j], array[i]];
+      //     }
+      //     return array;
+      // }
+
+      // Función para renderizar preguntas
+      function renderQuestions() {
+        const questionnaire = document.getElementById("questionnaire");
+        questionnaire.innerHTML = "";
+
+        currentQuestions.forEach((question, index) => {
+          const questionDiv = document.createElement("div");
+          questionDiv.className = "question";
+          questionDiv.innerHTML = `
+                    <div class="question-number">${question.number}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="question-options">
+                        ${[1, 2, 3, 4, 5]
+                          .map(
+                            (value) => `
+                            <div class="radio-group">
+                                <input type="radio" id="q${question.number}_${value}" 
+                                       name="question_${question.number}" 
+                                       value="${value}" 
+                                       onchange="updateAnswer(${question.number}, ${value}, '${question.type}')">
+                                <label for="q${question.number}_${value}">${value}</label>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                `;
+          questionnaire.appendChild(questionDiv);
+        });
+      }
+
+      // Función para actualizar respuesta
+      function updateAnswer(questionNumber, value, type) {
+        answers[questionNumber] = {
+          value: parseInt(value),
+          type: type,
+        };
+        updateProgress();
+      }
+
+      // Función para actualizar progreso
+      function updateProgress() {
+        const totalQuestions = currentQuestions.length;
+        const answeredQuestions = Object.keys(answers).length;
+        const percentage = Math.round(
+          (answeredQuestions / totalQuestions) * 100
+        );
+
+        document.getElementById("progressFill").style.width = percentage + "%";
+        document.getElementById(
+          "progressText"
+        ).textContent = `${answeredQuestions} de ${totalQuestions} preguntas completadas (${percentage}%)`;
+      }
+
+      // Función para limpiar respuestas
+      function clearAnswers() {
+        if (
+          confirm("¿Estás seguro de que quieres limpiar todas las respuestas?")
+        ) {
+          answers = {};
+          document.querySelectorAll('input[type="radio"]').forEach((input) => {
+            input.checked = false;
+          });
+          updateProgress();
+        }
+      }
+
+      // Función para calcular resultados
+      function calculateResults() {
+        if (Object.keys(answers).length < currentQuestions.length) {
+          alert(
+            "Por favor completa todas las preguntas antes de calcular los resultados."
+          );
+          return;
+        }
+
+        // Validar información personal
+        const requiredFields = ["nombre", "edad", "ocupacion"];
+        const missingFields = requiredFields.filter(
+          (field) => !document.getElementById(field).value.trim()
+        );
+
+        if (missingFields.length > 0) {
+          alert(
+            "Por favor completa todos los campos obligatorios de información personal."
+          );
+          return;
+        }
+
+        enviarDatosAGoogleSheets();
+
+        // Calcular puntuaciones por tipo
+        const scores = {};
+        for (let i = 1; i <= 9; i++) {
+          scores[i] = 0;
+        }
+
+        Object.values(answers).forEach((answer) => {
+          scores[answer.type] += answer.value;
+        });
+
+        // Encontrar el tipo dominante
+        let dominantType = "1";
+        let maxScore = scores["1"];
+
+        for (let type in scores) {
+          if (scores[type] > maxScore) {
+            maxScore = scores[type];
+            dominantType = type;
+          }
+        }
+
+        displayResults(scores, dominantType);
+      }
+
+      // Función para mostrar resultados
+      function displayResults(scores, dominantType) {
+        // Ocultar cuestionario y mostrar resultados
+        document.getElementById("questionnaireSection").style.display = "none";
+        document.getElementById("results").style.display = "block";
+
+        // Mostrar datos personales
+        displayPersonalData();
+
+        // Mostrar puntuaciones
+        displayScores(scores);
+
+        // Mostrar resultado principal
+        displayMainResult(dominantType, scores[dominantType]);
+
+        // Mostrar recomendaciones
+        // displayRecommendations(dominantType);
+
+        // Scroll hacia resultados
+        document
+          .getElementById("results")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Función para mostrar datos personales
+      function displayPersonalData() {
+        const personalData = {
+          codigo: document.getElementById("codigo").value || "No especificado",
+          nombre: document.getElementById("nombre").value,
+          edad: document.getElementById("edad").value,
+          genero: document.getElementById("genero").value || "No especificado",
+          rolfamilia:
+            document.getElementById("rolfamilia").value || "No especificado",
+          estadocivil:
+            document.getElementById("estadocivil").value || "No especificado",
+          ocupacion: document.getElementById("ocupacion").value,
+          nivelestudio:
+            document.getElementById("nivelestudio").value || "No especificado",
+          niveleconomico:
+            document.getElementById("niveleconomico").value ||
+            "No especificado",
+          creencia:
+            document.getElementById("creencia").value || "No especificado",
+        };
+
+        const personalDataDiv = document.getElementById("personalData");
+        personalDataDiv.innerHTML = `
+                <div style="background: var(--surface-elevated); padding: 24px; border-radius: 12px; margin-bottom: 32px; border: 1px solid var(--border-light);">
+                    <h3 style="margin-bottom: 16px; color: var(--text-primary);">Datos Personales</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; font-size: 0.9rem;">
+                        <p><strong>Nombre:</strong> ${personalData.nombre}</p>
+                        <p><strong>Edad:</strong> ${personalData.edad} años</p>
+                        <p><strong>Género:</strong> ${personalData.genero}</p>
+                        <p><strong>Ocupación:</strong> ${personalData.ocupacion}</p>
+                        <p><strong>Estado Civil:</strong> ${personalData.estadocivil}</p>
+                        <p><strong>Nivel de Estudio:</strong> ${personalData.nivelestudio}</p>
+                    </div>
+                </div>
+            `;
+      }
+
+      // Función para mostrar puntuaciones
+      function displayScores(scores) {
+        const scoresGrid = document.getElementById("scoresGrid");
+        scoresGrid.innerHTML = "";
+
+        for (let type = 1; type <= 9; type++) {
+          const scoreCard = document.createElement("div");
+          scoreCard.className = "score-card";
+          scoreCard.innerHTML = `
+                    <div class="score-type">Tipo ${type}</div>
+                    <div class="score-value">${scores[type]} pts</div>
+                `;
+          scoresGrid.appendChild(scoreCard);
+        }
+      }
+
+      // Función para mostrar resultado principal
+      function displayMainResult(dominantType, score) {
+        const maxPossibleScore = 6 * 5; // 6 preguntas por tipo × 5 puntos máximos
+        const percentage = Math.round((score / maxPossibleScore) * 100);
+
+        const mainResult = document.getElementById("mainResult");
+
+        const recomendacionesHTML = enneagramTypes[dominantType].recomendaciones
+          .map((rec) => `<li>${rec}</li>`)
+          .join("");
+
+        mainResult.innerHTML = `
+            <div class="enneagram-type">Tipo ${dominantType}</div>
+            <div class="enneagram-name">${enneagramTypes[dominantType].name}</div>
+            <div class="enneagram-description">${enneagramTypes[dominantType].description}</div>
+            <div style="margin-top: 20px; color: var(--text-secondary);">
+                <strong>Puntuación:</strong> ${score}/${maxPossibleScore} puntos (${percentage}%)
+            </div>
+            <div class="recommendations">
+                <h3>Recomendaciones para tu Desarrollo</h3>
+                <div class="recommendation-list">
+                    ${recomendacionesHTML}
+                </div>
+            </div>
+        `;
+      }
+
+      // Función para mostrar recomendaciones (simplificada)
+      function displayRecommendations(dominantType) {
+        const recommendations = {
+          1: [
+            "Practica la autocompasión y acepta que la perfección no siempre es necesaria",
+            "Aprende técnicas de relajación para manejar la irritación",
+            "Reconoce y celebra el progreso, no solo los resultados perfectos",
+          ],
+          2: [
+            "Dedica tiempo a identificar y atender tus propias necesidades",
+            "Practica decir 'no' cuando sea necesario para tu bienestar",
+            "Desarrolla relaciones donde también recibas apoyo",
+          ],
+          // ... continúa con los otros tipos
+        };
+
+        const recommendationsDiv = document.getElementById("recommendations");
+        const typeRecommendations = recommendations[dominantType] || [
+          "Busca el desarrollo personal continuo",
+          "Practica la autoconciencia y la reflexión",
+          "Considera trabajar con un coach o terapeuta especializado en eneagrama",
+        ];
+
+        recommendationsDiv.innerHTML = `
+                <h3>Recomendaciones para tu Desarrollo</h3>
+                ${typeRecommendations
+                  .map((rec) => `<div class="recommendation-item">${rec}</div>`)
+                  .join("")}
+            `;
+      }
+
+      // Función para reiniciar cuestionario
+      function resetQuestionnaire() {
+        if (
+          confirm("¿Estás seguro de que quieres comenzar una nueva evaluación?")
+        ) {
+          answers = {};
+          document.getElementById("results").style.display = "none";
+          document.getElementById("questionnaireSection").style.display =
+            "block";
+
+          // Limpiar formulario
+          document.querySelectorAll("input, select").forEach((input) => {
+            if (input.type === "radio") {
+              input.checked = false;
+            } else {
+              input.value = "";
+            }
+          });
+
+          updateProgress();
+          document
+            .getElementById("personalInfo")
+            .scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      // Función para imprimir resultados
+      function printResults() {
+        window.print();
+      }
+
+      //   Enviar al sheets
+      function enviarDatosAGoogleSheets() {
+        const datos = {
+          fila: [
+            document.getElementById("codigo").value,
+            document.getElementById("nombre").value,
+            document.getElementById("edad").value,
+            document.getElementById("genero").value,
+            document.getElementById("rolfamilia").value,
+            document.getElementById("estadocivil").value,
+            document.getElementById("ocupacion").value,
+            document.getElementById("nivelestudio").value,
+            document.getElementById("niveleconomico").value,
+            document.getElementById("creencia").value,
+            ...Object.values(answers),
+          ],
+        };
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbzmV2wSVspNyFUjC8XgHlkXl1jrweYeMW2FRW1AO2flyCiPaBFFkrWtyIv2qt1FF-XN/exec",
+          {
+            method: "POST",
+            mode: "no-cors", // si solo quieres enviar sin esperar respuesta
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datos),
+          }
+        )
+          .then(() => {
+            alert("Datos enviados correctamente.");
+          })
+          .catch((error) => {
+            console.error("Error al enviar los datos:", error);
+            alert("Hubo un error al enviar los datos.");
+          });
+      }
+
+      // Inicializar cuando se carga la página
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeQuestionnaire();
+      });
+
+      // Estilos adicionales para impresión
+      const printStyles = `
+            <style media="print">
+                .button-container { display: none !important; }
+                .progress-bar { display: none !important; }
+                .header { background: #f8f9fa !important; color: #333 !important; }
+                body { background: white !important; }
+                .container { box-shadow: none !important; }
+            </style>
+        `;
+      document.head.insertAdjacentHTML("beforeend", printStyles);
+    </script>
+  </body>
+</html>
