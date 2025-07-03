@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Cociente Emocional de Bar-On</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        .instrucciones {
+            background-color: #e8f4f8;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .instrucciones h3 {
+            color: #0c5460;
+            margin-top: 0;
+        }
+        .escala-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .escala-info h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .pregunta {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .pregunta-numero {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        .pregunta-texto {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .opciones {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .opcion {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        .opcion input[type="radio"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        .opcion label {
+            display: block;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        .opcion label:hover {
+            background-color: #e3f2fd;
+            border-color: #3498db;
+        }
+        .opcion input[type="radio"]:checked + label {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .progreso {
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 20px;
+        }
+        .progreso-barra {
+            background-color: #3498db;
+            height: 20px;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .botones {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .oculto {
+            display: none;
+        }
+        
+        /* Estilos para los resultados */
+        .area-section {
+            margin-bottom: 30px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .area-header {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .subescala-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 15px;
+            gap: 15px;
+        }
+        .subescala-card {
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .subescala-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .puntaje {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .nivel {
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .muy-alto { background-color: #27ae60; color: white; }
+        .alto { background-color: #2ecc71; color: white; }
+        .promedio { background-color: #f39c12; color: white; }
+        .bajo { background-color: #e74c3c; color: white; }
+        .muy-bajo { background-color: #c0392b; color: white; }
+        
+        .resumen-total {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .ce-total {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .interpretacion {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .interpretacion h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .btn-volver {
+            background-color: #95a5a6;
+            margin-top: 20px;
+        }
+        .btn-volver:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventario de Cociente Emocional de Bar-On (EQ-i)</h1>
+        
+        <!-- Sección del Cuestionario -->
+        <div id="cuestionario">
+            <div class="instrucciones">
+                <h3>Instrucciones</h3>
+                <p>A continuación encontrará una serie de afirmaciones sobre diferentes aspectos de su vida emocional y social. Para cada afirmación, seleccione la respuesta que mejor describa su situación actual.</p>
+                <p><strong>No hay respuestas correctas o incorrectas.</strong> Responda de manera sincera y espontánea.</p>
+            </div>
+            
+            <div class="escala-info">
+                <h4>Escala de Respuestas:</h4>
+                <p><strong>1</strong> = Nunca es mi caso &nbsp;|&nbsp; <strong>2</strong> = Pocas veces es mi caso &nbsp;|&nbsp; <strong>3</strong> = A veces es mi caso &nbsp;|&nbsp; <strong>4</strong> = Muchas veces es mi caso &nbsp;|&nbsp; <strong>5</strong> = Siempre es mi caso</p>
+            </div>
+            
+            <div class="progreso">
+                <div class="progreso-barra" id="progreso-barra" style="width: 0%;">0%</div>
+            </div>
+            
+            <form id="formulario-ce">
+                <div id="preguntas-container"></div>
+                
+                <div class="botones">
+                    <button type="button" id="btn-enviar" class="btn" disabled>Calcular Resultados</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Sección de Resultados -->
+        <div id="resultados" class="oculto">
+            <div id="resultados-container"></div>
+            
+            <div class="resumen-total">
+                <h2>Cociente Emocional Total</h2>
+                <div class="ce-total" id="ce-total"></div>
+                <div class="nivel" id="nivel-total"></div>
+            </div>
+            
+            <div class="interpretacion">
+                <h3>Interpretación de Niveles</h3>
+                <p><strong>Muy Alto (121+):</strong> Capacidades excepcionales en esta área</p>
+                <p><strong>Alto (110-120):</strong> Capacidades bien desarrolladas</p>
+                <p><strong>Promedio (91-109):</strong> Capacidades dentro del rango normal</p>
+                <p><strong>Bajo (80-90):</strong> Área que requiere desarrollo</p>
+                <p><strong>Muy Bajo (0-79):</strong> Área que necesita atención prioritaria</p>
+            </div>
+            
+            <div class="botones">
+                <button type="button" id="btn-volver" class="btn btn-volver">Volver al Cuestionario</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preguntas del cuestionario
+        const preguntas = [
+            "Para superar las dificultades que se me presentan, actúo paso a paso",
+            "Me resulta difícil disfrutar de la vida",
+            "Prefiero un trabajo en el que se me diga casi todo lo que debo hacer",
+            "Sé como enfrentar los problemas más desagradables",
+            "Me agradan las personas que conozco",
+            "Trato de valorar y darle el mejor sentido a mi vida",
+            "Me resulta relativamente fácil expresar mis sentimientos",
+            "Trato de ser realista, no me gusta fantasear ni soñar despierto(a)",
+            "Reconozco con facilidad mis emociones",
+            "Soy incapaz de demostrar afecto",
+            "Me siento seguro(a) de mí mismo(a) en la mayoría de las situaciones",
+            "Tengo la sensación de que algo no está bien en mi cabeza",
+            "Tengo problemas para controlarme cuando me enojo",
+            "Me resulta difícil comenzar cosas nuevas",
+            "Cuando enfrento una situación difícil me gusta reunir toda la información posible sobre ella",
+            "Me gusta ayudar a la gente",
+            "Me es difícil sonreír",
+            "Soy incapaz de comprender cómo se sienten los demás",
+            "Cuando trabajo con otros, tiendo a confiar más en sus ideas que en las mías",
+            "Creo que tengo la capacidad para controlar las situaciones difíciles",
+            "Realmente no sé para qué soy bueno(a)",
+            "No soy capaz de expresar mis ideas a los demás",
+            "Me resulta difícil compartir mis sentimientos más íntimos con los demás",
+            "No tengo confianza en mí mismo(a)",
+            "Creo que he perdido la cabeza",
+            "Soy optimista en la mayoría de las cosas que hago",
+            "Cuando comienzo a hablar me resulta difícil detenerme",
+            "En general, me resulta difícil adaptarme a los cambios",
+            "Soy bueno(a) para comprender los sentimientos de las personas",
+            "No soy bueno(a) para romper las relaciones íntimas",
+            "Generalmente espero que suceda lo mejor",
+            "Mis amigos me confían sus intimidades",
+            "No me siento bien conmigo mismo(a)",
+            "Percibo cosas extrañas que los demás no ven",
+            "La gente me dice que baje el tono de voz cuando discuto",
+            "Me resulta fácil adaptarme a situaciones nuevas",
+            "Cuando intento resolver un problema analizo todas las posibles soluciones y luego escojo la que considero mejor",
+            "Después de que algo me ha molestado, tardo mucho tiempo en recuperar la calma",
+            "Rara vez me divierte lo que hago",
+            "Prefiero que otros tomen las decisiones por mí",
+            "Me considero una persona fuerte",
+            "Tengo tendencia a explotar de cólera fácilmente",
+            "Me resulta difícil esperar mi turno",
+            "Me divierte las cosas que hago",
+            "Me gustan todas las personas que conozco",
+            "No me siento capaz de enfrentar los problemas de mi vida",
+            "Me siento feliz con el tipo de persona que soy",
+            "Percibo cosas extrañas que los demás no ven",
+            "Me es difícil mantener la calma",
+            "Rara vez me siento feliz",
+            "No me doy por vencido(a) ante un problema hasta que lo resuelvo",
+            "Tengo mal genio",
+            "Nada me perturba",
+            "No me entusiasman mucho mis intereses",
+            "Cuando estoy enojado(a) con alguien me siento capaz de decírselo",
+            "Trato de aprovechar al máximo las cosas que me gustan",
+            "Los demás piensan que no me hago valer, que me falta firmeza",
+            "Soy capaz de dejar de fantasear para volver inmediatamente a la realidad",
+            "Los demás opinan que soy una persona sociable",
+            "Estoy contento(a) con mi vida",
+            "Me resulta difícil tomar decisiones por mi cuenta",
+            "Los demás opinan que soy una persona divertida",
+            "Tengo tendencia a explotar de cólera fácilmente",
+            "Si pudiera violar la ley sin pagar las consecuencias, lo haría en determinadas situaciones",
+            "Me deprimo",
+            "Sé como mantener la calma en situaciones difíciles",
+            "Nunca he mentido",
+            "En general me siento motivado(a) para continuar adelante, aun cuando las cosas se ponen difíciles",
+            "Trato de continuar y desarrollar aquellas cosas que me divierten",
+            "Me resulta difícil decir 'no' aunque tenga el deseo de hacerlo",
+            "Me dejo llevar por mi imaginación y mis fantasías",
+            "Mis más cercanas relaciones significan mucho, tanto para mí como para mis amigos",
+            "Me resulta fácil dar a conocer mis sentimientos",
+            "Tengo tendencia a deprimirme",
+            "Me siento confundido(a) respecto a mis emociones",
+            "Debo decir siempre la verdad",
+            "Puedo tener confianza en mi manera de enfrentar los problemas",
+            "No puedo soportar ver sufrir a la gente",
+            "Me gusta divertirme",
+            "Es difícil para mí comprender como me siento",
+            "He logrado muy poco en los últimos años",
+            "Cuando estoy enojado(a) con alguien se lo puedo decir",
+            "He tenido experiencias extrañas que son inexplicables",
+            "Me resulta fácil hacer amigos(as)",
+            "Me tengo mucho respeto",
+            "Hago cosas muy raras",
+            "Soy impulsivo(a), y esto me trae problemas",
+            "Me resulta difícil cambiar de opinión",
+            "Soy bueno para comprender los sentimientos de las personas",
+            "Lo primero que hago cuando tengo un problema es detenerme a pensar",
+            "A la gente le resulta difícil confiar en mí",
+            "Estoy contento(a) con mi vida",
+            "Me resulta difícil enfrentar las cosas desagradables de la vida",
+            "Nunca he violado la ley",
+            "Disfruto de aquellas cosas que me interesan",
+            "Me resulta relativamente fácil decirle a la gente lo que pienso",
+            "Tiendo a exagerar",
+            "Soy sensible a los sentimientos de las otras personas",
+            "Mantengo buenas relaciones con la gente",
+            "Estoy contento(a) de como me veo",
+            "Tengo pensamientos extraños que nadie logra entender",
+            "Me es difícil describir lo que siento",
+            "Tengo mal genio",
+            "Por lo general, espero que suceda lo mejor",
+            "Mis amigos me confían sus problemas",
+            "No me siento bien conmigo mismo(a)",
+            "Percibo cosas de maneras diferentes a como las perciben los demás",
+            "Me resulta difícil encontrar el enfoque correcto para resolver un problema",
+            "Me es difícil aguantar cuando las cosas no salen como yo quiero",
+            "Puedo manejar situaciones de stress, sin ponerme demasiado nervioso(a)",
+            "Tengo pensamientos positivos para conmigo mismo(a)",
+            "Me resulta difícil entender como me siento",
+            "He logrado establecer una buena relación con la gente",
+            "Tengo tendencia a impacientarme",
+            "Soy feliz",
+            "Me preocupo por hacer cosas para los demás",
+            "No tengo días malos",
+            "Me resulta difícil enfrentar los problemas de la vida",
+            "Nunca estoy triste",
+            "Estoy manejando bien mi vida",
+            "Me resulta difícil mostrar mis sentimientos más íntimos",
+            "La gente piensa bien de mí",
+            "Aguanto bien la presión",
+            "Nada me molesta",
+            "No me entusiasman mucho las cosas",
+            "Cuando trabajo en grupo, solo acepto hacer aquello en lo que realmente soy bueno(a)",
+            "Desde que tengo memoria, siempre he sido obediente",
+            "Intento no herir los sentimientos de los demás",
+            "No tengo una buena idea de lo que quiero hacer en mi vida",
+            "Es difícil para mí tomar decisiones por mi cuenta",
+            "Pienso que soy el/la mejor en todo lo que hago",
+            "Para mí es fácil decirle a las personas como me siento",
+            "Cuando juego en grupo, me gusta ganar",
+            "En general, cuando comienzo algo nuevo tengo la sensación que voy a fracasar",
+            "He respondido sincera y honestamente a las frases anteriores"
+        ];
+
+        // Definición de componentes y sus ítems
+        const componentes = {
+            'Intrapersonal': {
+                'Comprensión Emocional de Sí Mismo': [7, 9, 23, 35, 52, 63, 88, 116],
+                'Asertividad': [22, 37, 67, 82, 96, 111, 126],
+                'Autoconcepto': [11, 24, 40, 56, 70, 85, 100, 114, 129],
+                'Autorrealización': [6, 21, 36, 51, 66, 81],
+                'Independencia': [3, 19, 32, 48, 92, 107, 121]
+            },
+            'Interpersonal': {
+                'Empatía': [18, 44, 55, 61, 72, 98, 119, 124],
+                'Responsabilidad Social': [16, 30, 46, 61, 72, 76, 90, 98, 104, 119],
+                'Relaciones Interpersonales': [55, 62, 69, 84, 99, 113, 120]
+            },
+            'Adaptabilidad': {
+                'Solución de Problemas': [1, 15, 29, 45, 60, 75, 89, 118],
+                'Prueba de la Realidad': [8, 35, 38, 57, 77, 87, 105, 112, 131],
+                'Flexibilidad': [12, 28, 35, 38, 53, 68, 83, 88, 97, 103, 128]
+            },
+            'Manejo de Estrés': {
+                'Tolerancia al Estrés': [4, 20, 33, 47, 64, 78, 93, 108, 122],
+                'Control de Impulsos': [13, 27, 42, 58, 73, 86, 102, 117, 130]
+            },
+            'Estado de Ánimo General': {
+                'Optimismo': [26, 31, 54, 80, 106, 108, 132],
+                'Felicidad': [2, 17, 31, 47, 50, 62, 71, 80, 106, 108, 127, 132]
+            }
+        };
+
+        // Ítems negativos que requieren inversión (ajustados a base 1)
+        const itemsNegativos = [2, 10, 12, 13, 17, 21, 22, 24, 28, 33, 34, 38, 39, 40, 42, 43, 48, 49, 50, 52, 56, 58, 64, 66, 68, 70, 71, 73, 74, 75, 77, 83, 86, 87, 91, 93, 94, 101, 102, 103, 107, 109, 111, 115, 117, 118, 122, 125, 126, 127, 128, 130, 131, 132];
+
+        let respuestasUsuario = {};
+
+        // Crear preguntas dinámicamente
+        function crearPreguntas() {
+            const container = document.getElementById('preguntas-container');
+            
+            preguntas.forEach((pregunta, index) => {
+                const preguntaDiv = document.createElement('div');
+                preguntaDiv.className = 'pregunta';
+                preguntaDiv.innerHTML = `
+                    <div class="pregunta-numero">Pregunta ${index + 1}</div>
+                    <div class="pregunta-texto">${pregunta}</div>
+                    <div class="opciones">
+                        <div class="opcion">
+                            <input type="radio" id="p${index + 1}_1" name="pregunta_${index + 1}" value="1">
+                            <label for="p${index + 1}_1">1<br>Nunca es<br>mi caso</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" id="p${index + 1}_2" name="pregunta_${index + 1}" value="2">
+                            <label for="p${index + 1}_2">2<br>Pocas veces<br>es mi caso</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" id="p${index + 1}_3" name="pregunta_${index + 1}" value="3">
+                            <label for="p${index + 1}_3">3<br>A veces<br>es mi caso</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" id="p${index + 1}_4" name="pregunta_${index + 1}" value="4">
+                            <label for="p${index + 1}_4">4<br>Muchas veces<br>es mi caso</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" id="p${index + 1}_5" name="pregunta_${index + 1}" value="5">
+                            <label for="p${index + 1}_5">5<br>Siempre es<br>mi caso</label>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(preguntaDiv);
+            });
+        }
+
+        // Actualizar progreso
+        function actualizarProgreso() {
+            const totalRespuestas = Object.keys(respuestasUsuario).length;
+            const porcentaje = Math.round((totalRespuestas / 133) * 100);
+            const barra = document.getElementById('progreso-barra');
+            barra.style.width = `${porcentaje}%`;
+            barra.textContent = `${porcentaje}%`;
+            
+            // Habilitar botón si está completo
+            const btnEnviar = document.getElementById('btn-enviar');
+            btnEnviar.disabled = totalRespuestas < 133;
+        }
+
+        // Manejar cambios en respuestas
+        function manejarRespuesta(event) {
+            const name = event.target.name;
+            const value = parseInt(event.target.value);
+            const preguntaNum = parseInt(name.split('_')[1]);
+            
+            respuestasUsuario[preguntaNum] = value;
+            actualizarProgreso();
+        }
+
+        // Función para obtener puntaje (con inversión si es necesario)
+        function obtenerPuntaje(item) {
+            const respuesta = respuestasUsuario[item] || 0;
+            if (itemsNegativos.includes(item)) {
+                return 6 - respuesta; // Inversión: 1→5, 2→4, 3→3, 4→2, 5→1
+            }
+            return respuesta;
+        }
+
+        // Función para determinar nivel
+        function determinarNivel(puntaje) {
+            if (puntaje >= 121) return { clase: 'muy-alto', texto: 'Muy Alto' };
+            if (puntaje >= 110) return { clase: 'alto', texto: 'Alto' };
+            if (puntaje >= 91) return { clase: 'promedio', texto: 'Promedio' };
+            if (puntaje >= 80) return { clase: 'bajo', texto: 'Bajo' };
+            return { clase: 'muy-bajo', texto: 'Muy Bajo' };
+        }
+
+        // Calcular y mostrar resultados
+        function calcularResultados() {
+            const resultados = {};
+            let totalGeneral = 0;
+
+            for (let area in componentes) {
+                resultados[area] = {};
+                for (let subescala in componentes[area]) {
+                    let total = 0;
+                    for (let item of componentes[area][subescala]) {
+                        total += obtenerPuntaje(item);
+                    }
+                    resultados[area][subescala] = total;
+                    totalGeneral += total;
+                }
+            }
+
+            mostrarResultados(resultados, totalGeneral);
+        }
+
+        // Mostrar resultados
+        function mostrarResultados(resultados, totalGeneral) {
+            const container = document.getElementById('resultados-container');
+            container.innerHTML = '';
+            
+            for (let area in resultados) {
+                const areaDiv = document.createElement('div');
+                areaDiv.className = 'area-section';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'area-header';
+                headerDiv.textContent = area;
+                areaDiv.appendChild(headerDiv);
+                
+                const subescalasDiv = document.createElement('div');
+                subescalasDiv.className = 'subescala-container';
+                
+                for (let subescala in resultados[area]) {
+                    const puntaje = resultados[area][subescala];
+                    const nivel = determinarNivel(puntaje);
+                    
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'subescala-card';
+                    
+                    cardDiv.innerHTML = `
+                        <div class="subescala-title">${subescala}</div>
+                        <div class="puntaje">${puntaje}</div>
+                        <div class="nivel ${nivel.clase}">${nivel.texto}</div>
+                    `;
+                    
+                    subescalasDiv.appendChild(cardDiv);
+                }
+                
+                areaDiv.appendChild(subescalasDiv);
+                container.appendChild(areaDiv);
+            }
+
+            // Mostrar CE Total
+            const nivelTotal = determinarNivel(totalGeneral);
+            document.getElementById('ce-total').textContent = totalGeneral;
+            document.getElementById('nivel-total').className = `nivel ${nivelTotal.clase}`;
+            document.getElementById('nivel-total').textContent = nivelTotal.texto;
+
+            // Mostrar sección de resultados
+            document.getElementById('cuestionario').classList.add('oculto');
+            document.getElementById('resultados').classList.remove('oculto');
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            crearPreguntas();
+            
+            // Agregar event listeners
+            document.addEventListener('change', function(event) {
+                if (event.target.type === 'radio') {
+                    manejarRespuesta(event);
+                }
+            });
+            
+            document.getElementById('btn-enviar').addEventListener('click', function() {
+                calcularResultados();
+            });
+            
+            document.getElementById('btn-volver').addEventListener('click', function() {
+                document.getElementById('resultados').classList.add('oculto');
+                document.getElementById('cuestionario').classList.remove('oculto');
+                // Resetear progreso
+                respuestasUsuario = {};
+                actualizarProgreso();
+                // Limpiar todas las selecciones
+                const radios = document.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => radio.checked = false);
+            });
+        });
+    </script>
+</body>
+</html>
